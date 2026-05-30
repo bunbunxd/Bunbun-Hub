@@ -12,9 +12,11 @@ local BunIcon = Instance.new("ImageLabel")
 local PlayerTabBtn = Instance.new("TextButton")
 local MiscTabBtn = Instance.new("TextButton")
 local SettingsTabBtn = Instance.new("TextButton")
-local PlayerFrame = Instance.new("Frame")
+local EspTabBtn = Instance.new("TextButton")
+local PlayerScroll = Instance.new("ScrollingFrame")
 local MiscFrame = Instance.new("Frame")
 local SettingsFrame = Instance.new("Frame")
+local EspFrame = Instance.new("Frame")
 
 -- Elementen in Player Tab
 local FlyButton = Instance.new("TextButton")
@@ -24,11 +26,14 @@ local Mode1Btn = Instance.new("TextButton")
 local Mode2Btn = Instance.new("TextButton")
 local Mode3Btn = Instance.new("TextButton")
 
--- Fly Style Selectie
+-- Fly Style
 local StyleFrame = Instance.new("Frame")
 local StyleLabel = Instance.new("TextLabel")
 local NormalStyleBtn = Instance.new("TextButton")
 local SupermanStyleBtn = Instance.new("TextButton")
+
+-- Tooltip
+local TooltipLabel = Instance.new("TextLabel")
 
 -- Speed Slider
 local SpeedSliderFrame = Instance.new("Frame")
@@ -38,12 +43,31 @@ local SpeedSliderFill = Instance.new("Frame")
 local SpeedSliderKnob = Instance.new("TextButton")
 local SpeedValueLabel = Instance.new("TextLabel")
 
--- Elementen in Left Panel (Keybind onderaan)
-local KeybindBtn = Instance.new("TextButton")
+-- Jump Height Slider
+local JumpSliderFrame = Instance.new("Frame")
+local JumpSliderLabel = Instance.new("TextLabel")
+local JumpSliderTrack = Instance.new("Frame")
+local JumpSliderFill = Instance.new("Frame")
+local JumpSliderKnob = Instance.new("TextButton")
+local JumpValueLabel = Instance.new("TextLabel")
 
--- UI Instellingen
+-- Noclip & Infinite Jump
+local NoclipButton = Instance.new("TextButton")
+local InfiniteJumpButton = Instance.new("TextButton")
+
+-- UI kleur state
+local accentColor = Color3.fromRGB(255, 40, 40)
+local bgDark = Color3.fromRGB(10, 10, 12)
+local bgMid = Color3.fromRGB(14, 14, 18)
+local bgPanel = Color3.fromRGB(15, 15, 18)
+
 ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
+
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
 --- ========================================== ---
 -- [[ STYLING UTILITIES ]] --
@@ -51,7 +75,7 @@ ScreenGui.ResetOnSpawn = false
 
 local function addOutline(parent, color, thickness)
 	local stroke = Instance.new("UIStroke")
-	stroke.Color = color or Color3.fromRGB(255, 50, 50)
+	stroke.Color = color or accentColor
 	stroke.Thickness = thickness or 1
 	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	stroke.Parent = parent
@@ -83,17 +107,31 @@ end
 
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
+MainFrame.BackgroundColor3 = bgDark
 MainFrame.Position = UDim2.new(0.5, -225, 0.25, -175)
 MainFrame.Size = UDim2.new(0, 450, 0, 390)
 MainFrame.Active = true
-addOutline(MainFrame, Color3.fromRGB(255, 40, 40), 1)
+addOutline(MainFrame, accentColor, 1)
 addCorner(MainFrame, 6)
 
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+-- Tooltip — breedte auto via TextBounds, vaste kleine hoogte
+TooltipLabel.Parent = ScreenGui
+TooltipLabel.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+TooltipLabel.AutomaticSize = Enum.AutomaticSize.X
+TooltipLabel.Size = UDim2.new(0, 0, 0, 22)
+TooltipLabel.Font = Enum.Font.RobotoMono
+TooltipLabel.Text = "// become clark kent!"
+TooltipLabel.TextColor3 = accentColor
+TooltipLabel.TextSize = 9
+TooltipLabel.ZIndex = 10
+TooltipLabel.Visible = false
+TooltipLabel.TextXAlignment = Enum.TextXAlignment.Left
+addOutline(TooltipLabel, accentColor, 1)
+addCorner(TooltipLabel, 4)
+local TooltipPadding = Instance.new("UIPadding")
+TooltipPadding.PaddingLeft = UDim.new(0, 8)
+TooltipPadding.PaddingRight = UDim.new(0, 8)
+TooltipPadding.Parent = TooltipLabel
 
 local dragging, dragInput, dragStart, startPos
 local function update(input)
@@ -121,12 +159,11 @@ end)
 
 LeftPanel.Name = "LeftPanel"
 LeftPanel.Parent = MainFrame
-LeftPanel.BackgroundColor3 = Color3.fromRGB(15, 15, 18)
+LeftPanel.BackgroundColor3 = bgPanel
 LeftPanel.Size = UDim2.new(0, 130, 1, 0)
 addOutline(LeftPanel, Color3.fromRGB(35, 35, 40), 1)
 addCorner(LeftPanel, 6)
 
--- Bugs Bunny icoon
 BunIcon.Parent = LeftPanel
 BunIcon.BackgroundTransparency = 1
 BunIcon.Position = UDim2.new(0, 6, 0, 8)
@@ -140,14 +177,14 @@ Title.Position = UDim2.new(0, 30, 0, 12)
 Title.Size = UDim2.new(1, -30, 0, 30)
 Title.Font = Enum.Font.RobotoMono
 Title.Text = "> BUNBUN"
-Title.TextColor3 = Color3.fromRGB(255, 40, 40)
+Title.TextColor3 = accentColor
 Title.TextSize = 16
 Title.TextXAlignment = Enum.TextXAlignment.Left
 
 TabContainer.Parent = LeftPanel
 TabContainer.BackgroundTransparency = 1
 TabContainer.Position = UDim2.new(0, 10, 0, 60)
-TabContainer.Size = UDim2.new(1, -20, 0, 150)
+TabContainer.Size = UDim2.new(1, -20, 0, 175)
 
 local function styleTabBtn(btn, text, pos)
 	btn.Parent = TabContainer
@@ -163,22 +200,22 @@ end
 styleTabBtn(PlayerTabBtn, "PLAYER", UDim2.new(0, 0, 0, 0))
 styleTabBtn(MiscTabBtn, "MISC", UDim2.new(0, 0, 0, 35))
 styleTabBtn(SettingsTabBtn, "SETTINGS", UDim2.new(0, 0, 0, 70))
-
-KeybindBtn.Parent = LeftPanel
-KeybindBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-KeybindBtn.Position = UDim2.new(0, 10, 1, -40)
-KeybindBtn.Size = UDim2.new(1, -20, 0, 30)
-KeybindBtn.Font = Enum.Font.RobotoMono
-KeybindBtn.Text = "BIND: LAlt"
-KeybindBtn.TextColor3 = Color3.fromRGB(255, 40, 40)
-KeybindBtn.TextSize = 11
-addOutline(KeybindBtn, Color3.fromRGB(40, 40, 45), 1)
-addCorner(KeybindBtn, 4)
+styleTabBtn(EspTabBtn, "ESP", UDim2.new(0, 0, 0, 105))
 
 ContentContainer.Parent = MainFrame
 ContentContainer.BackgroundTransparency = 1
 ContentContainer.Position = UDim2.new(0, 140, 0, 15)
 ContentContainer.Size = UDim2.new(1, -155, 1, -30)
+
+-- PlayerScroll — canvas vergroot voor jump slider
+PlayerScroll.Name = "PlayerScroll"
+PlayerScroll.Parent = ContentContainer
+PlayerScroll.BackgroundTransparency = 1
+PlayerScroll.Size = UDim2.new(1, 0, 1, 0)
+PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, 580)
+PlayerScroll.ScrollBarThickness = 3
+PlayerScroll.ScrollBarImageColor3 = accentColor
+PlayerScroll.Visible = true
 
 local function createPage(name)
 	local f = Instance.new("Frame")
@@ -189,24 +226,25 @@ local function createPage(name)
 	f.Visible = false
 	return f
 end
-PlayerFrame = createPage("PlayerFrame")
 MiscFrame = createPage("MiscFrame")
 SettingsFrame = createPage("SettingsFrame")
-PlayerFrame.Visible = true
+EspFrame = createPage("EspFrame")
 
-FlyButton.Parent = PlayerFrame
+-- FlyButton
+FlyButton.Parent = PlayerScroll
 FlyButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 FlyButton.Position = UDim2.new(0, 0, 0, 10)
 FlyButton.Size = UDim2.new(1, 0, 0, 45)
 FlyButton.Font = Enum.Font.RobotoMono
 FlyButton.Text = "// TOGGLE FLY: OFF"
-FlyButton.TextColor3 = Color3.fromRGB(255, 40, 40)
+FlyButton.TextColor3 = accentColor
 FlyButton.TextSize = 14
 addOutline(FlyButton, Color3.fromRGB(40, 40, 45), 1)
 addCorner(FlyButton, 4)
 
-SpeedFrame.Parent = PlayerFrame
-SpeedFrame.BackgroundColor3 = Color3.fromRGB(14, 14, 18)
+-- SpeedFrame
+SpeedFrame.Parent = PlayerScroll
+SpeedFrame.BackgroundColor3 = bgMid
 SpeedFrame.Position = UDim2.new(0, 0, 0, 70)
 SpeedFrame.Size = UDim2.new(1, 0, 0, 85)
 addOutline(SpeedFrame, Color3.fromRGB(30, 30, 35), 1)
@@ -226,8 +264,9 @@ styleOptionBtn(Mode1Btn, SpeedFrame, "INIT_1", UDim2.new(0.04, 0, 0, 38))
 styleOptionBtn(Mode2Btn, SpeedFrame, "HALF_2", UDim2.new(0.36, 0, 0, 38))
 styleOptionBtn(Mode3Btn, SpeedFrame, "FULL_3", UDim2.new(0.68, 0, 0, 38))
 
-StyleFrame.Parent = PlayerFrame
-StyleFrame.BackgroundColor3 = Color3.fromRGB(14, 14, 18)
+-- StyleFrame
+StyleFrame.Parent = PlayerScroll
+StyleFrame.BackgroundColor3 = bgMid
 StyleFrame.Position = UDim2.new(0, 0, 0, 170)
 StyleFrame.Size = UDim2.new(1, 0, 0, 85)
 addOutline(StyleFrame, Color3.fromRGB(30, 30, 35), 1)
@@ -244,13 +283,34 @@ StyleLabel.TextSize = 12
 StyleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 styleOptionBtn(NormalStyleBtn, StyleFrame, "NORMAL", UDim2.new(0.04, 0, 0, 38), UDim2.new(0.44, 0, 0, 35))
-styleOptionBtn(SupermanStyleBtn, StyleFrame, "SUPERMAN", UDim2.new(0.52, 0, 0, 38), UDim2.new(0.44, 0, 0, 35))
 
--- [[ SPEED SLIDER UI ]] --
+SupermanStyleBtn.Parent = StyleFrame
+SupermanStyleBtn.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
+SupermanStyleBtn.Position = UDim2.new(0.52, 0, 0, 38)
+SupermanStyleBtn.Size = UDim2.new(0.44, 0, 0, 35)
+SupermanStyleBtn.Font = Enum.Font.RobotoMono
+SupermanStyleBtn.Text = "SUPERMAN ?"
+SupermanStyleBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+SupermanStyleBtn.TextSize = 12
+addOutline(SupermanStyleBtn, Color3.fromRGB(45, 45, 50), 1)
+addCorner(SupermanStyleBtn, 4)
+
+SupermanStyleBtn.MouseEnter:Connect(function()
+	local absPos = MainFrame.AbsolutePosition
+	local absSize = MainFrame.AbsoluteSize
+	local btnAbsPos = SupermanStyleBtn.AbsolutePosition
+	TooltipLabel.Position = UDim2.new(0, absPos.X + absSize.X + 8, 0, btnAbsPos.Y)
+	TooltipLabel.Visible = true
+end)
+SupermanStyleBtn.MouseLeave:Connect(function()
+	TooltipLabel.Visible = false
+end)
+
+-- Speed Slider
 local walkSpeedValue = 16
 
-SpeedSliderFrame.Parent = PlayerFrame
-SpeedSliderFrame.BackgroundColor3 = Color3.fromRGB(14, 14, 18)
+SpeedSliderFrame.Parent = PlayerScroll
+SpeedSliderFrame.BackgroundColor3 = bgMid
 SpeedSliderFrame.Position = UDim2.new(0, 0, 0, 270)
 SpeedSliderFrame.Size = UDim2.new(1, 0, 0, 75)
 addOutline(SpeedSliderFrame, Color3.fromRGB(30, 30, 35), 1)
@@ -272,7 +332,7 @@ SpeedValueLabel.Position = UDim2.new(0.75, 0, 0, 8)
 SpeedValueLabel.Size = UDim2.new(0.22, 0, 0, 20)
 SpeedValueLabel.Font = Enum.Font.RobotoMono
 SpeedValueLabel.Text = "16"
-SpeedValueLabel.TextColor3 = Color3.fromRGB(255, 40, 40)
+SpeedValueLabel.TextColor3 = accentColor
 SpeedValueLabel.TextSize = 12
 SpeedValueLabel.TextXAlignment = Enum.TextXAlignment.Right
 
@@ -283,7 +343,7 @@ SpeedSliderTrack.Size = UDim2.new(1, -24, 0, 6)
 addCorner(SpeedSliderTrack, 3)
 
 SpeedSliderFill.Parent = SpeedSliderTrack
-SpeedSliderFill.BackgroundColor3 = Color3.fromRGB(255, 40, 40)
+SpeedSliderFill.BackgroundColor3 = accentColor
 SpeedSliderFill.Size = UDim2.new(0.1, 0, 1, 0)
 addCorner(SpeedSliderFill, 3)
 
@@ -293,52 +353,426 @@ SpeedSliderKnob.Position = UDim2.new(0.1, -6, 0.5, -6)
 SpeedSliderKnob.Size = UDim2.new(0, 12, 0, 12)
 SpeedSliderKnob.Text = ""
 addCorner(SpeedSliderKnob, 6)
-addOutline(SpeedSliderKnob, Color3.fromRGB(255, 40, 40), 1)
+addOutline(SpeedSliderKnob, accentColor, 1)
 
+-- Jump Height Slider
+local jumpHeightValue = 50
+
+JumpSliderFrame.Parent = PlayerScroll
+JumpSliderFrame.BackgroundColor3 = bgMid
+JumpSliderFrame.Position = UDim2.new(0, 0, 0, 360)
+JumpSliderFrame.Size = UDim2.new(1, 0, 0, 75)
+addOutline(JumpSliderFrame, Color3.fromRGB(30, 30, 35), 1)
+addCorner(JumpSliderFrame, 4)
+
+JumpSliderLabel.Parent = JumpSliderFrame
+JumpSliderLabel.BackgroundTransparency = 1
+JumpSliderLabel.Position = UDim2.new(0, 12, 0, 8)
+JumpSliderLabel.Size = UDim2.new(0.7, 0, 0, 20)
+JumpSliderLabel.Font = Enum.Font.RobotoMono
+JumpSliderLabel.Text = "> PLAYER JUMPHEIGHT:"
+JumpSliderLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+JumpSliderLabel.TextSize = 12
+JumpSliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+JumpValueLabel.Parent = JumpSliderFrame
+JumpValueLabel.BackgroundTransparency = 1
+JumpValueLabel.Position = UDim2.new(0.75, 0, 0, 8)
+JumpValueLabel.Size = UDim2.new(0.22, 0, 0, 20)
+JumpValueLabel.Font = Enum.Font.RobotoMono
+JumpValueLabel.Text = "50"
+JumpValueLabel.TextColor3 = accentColor
+JumpValueLabel.TextSize = 12
+JumpValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+
+JumpSliderTrack.Parent = JumpSliderFrame
+JumpSliderTrack.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+JumpSliderTrack.Position = UDim2.new(0, 12, 0, 42)
+JumpSliderTrack.Size = UDim2.new(1, -24, 0, 6)
+addCorner(JumpSliderTrack, 3)
+
+JumpSliderFill.Parent = JumpSliderTrack
+JumpSliderFill.BackgroundColor3 = accentColor
+JumpSliderFill.Size = UDim2.new(0.5, 0, 1, 0)
+addCorner(JumpSliderFill, 3)
+
+JumpSliderKnob.Parent = JumpSliderTrack
+JumpSliderKnob.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+JumpSliderKnob.Position = UDim2.new(0.5, -6, 0.5, -6)
+JumpSliderKnob.Size = UDim2.new(0, 12, 0, 12)
+JumpSliderKnob.Text = ""
+addCorner(JumpSliderKnob, 6)
+addOutline(JumpSliderKnob, accentColor, 1)
+
+-- Noclip
+NoclipButton.Parent = PlayerScroll
+NoclipButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+NoclipButton.Position = UDim2.new(0, 0, 0, 450)
+NoclipButton.Size = UDim2.new(1, 0, 0, 45)
+NoclipButton.Font = Enum.Font.RobotoMono
+NoclipButton.Text = "// TOGGLE NOCLIP: OFF"
+NoclipButton.TextColor3 = accentColor
+NoclipButton.TextSize = 14
+addOutline(NoclipButton, Color3.fromRGB(40, 40, 45), 1)
+addCorner(NoclipButton, 4)
+
+-- Infinite Jump
+InfiniteJumpButton.Parent = PlayerScroll
+InfiniteJumpButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+InfiniteJumpButton.Position = UDim2.new(0, 0, 0, 510)
+InfiniteJumpButton.Size = UDim2.new(1, 0, 0, 45)
+InfiniteJumpButton.Font = Enum.Font.RobotoMono
+InfiniteJumpButton.Text = "// INFINITE JUMP: OFF"
+InfiniteJumpButton.TextColor3 = accentColor
+InfiniteJumpButton.TextSize = 14
+addOutline(InfiniteJumpButton, Color3.fromRGB(40, 40, 45), 1)
+addCorner(InfiniteJumpButton, 4)
+
+--- ========================================== ---
 -- [[ MISC FRAME ]] --
+--- ========================================== ---
+
 local MiscLabel = Instance.new("TextLabel")
 MiscLabel.Parent = MiscFrame
 MiscLabel.BackgroundTransparency = 1
 MiscLabel.Position = UDim2.new(0, 0, 0, 10)
-MiscLabel.Size = UDim2.new(1, 0, 0, 30)
+MiscLabel.Size = UDim2.new(1, 0, 0, 20)
 MiscLabel.Font = Enum.Font.RobotoMono
 MiscLabel.Text = "// MISCELLANEOUS UTILITIES"
 MiscLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
 MiscLabel.TextSize = 13
 MiscLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+local TpBtn = Instance.new("TextButton")
+TpBtn.Parent = MiscFrame
+TpBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+TpBtn.Position = UDim2.new(0, 0, 0, 38)
+TpBtn.Size = UDim2.new(1, 0, 0, 38)
+TpBtn.Font = Enum.Font.RobotoMono
+TpBtn.Text = "// TP TO PLAYER"
+TpBtn.TextColor3 = accentColor
+TpBtn.TextSize = 13
+addOutline(TpBtn, Color3.fromRGB(40, 40, 45), 1)
+addCorner(TpBtn, 4)
+
+local TpListFrame = Instance.new("ScrollingFrame")
+TpListFrame.Parent = MiscFrame
+TpListFrame.BackgroundColor3 = bgMid
+TpListFrame.Position = UDim2.new(0, 0, 0, 84)
+TpListFrame.Size = UDim2.new(1, 0, 0, 180)
+TpListFrame.ScrollBarThickness = 4
+TpListFrame.ScrollBarImageColor3 = accentColor
+TpListFrame.Visible = false
+TpListFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+addOutline(TpListFrame, Color3.fromRGB(30, 30, 35), 1)
+addCorner(TpListFrame, 4)
+
+local TpListLayout = Instance.new("UIListLayout")
+TpListLayout.Parent = TpListFrame
+TpListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+TpListLayout.Padding = UDim.new(0, 4)
+
+local TpListPadding = Instance.new("UIPadding")
+TpListPadding.Parent = TpListFrame
+TpListPadding.PaddingTop = UDim.new(0, 6)
+TpListPadding.PaddingLeft = UDim.new(0, 6)
+TpListPadding.PaddingRight = UDim.new(0, 6)
+
+local function buildTpList()
+	for _, c in ipairs(TpListFrame:GetChildren()) do
+		if c:IsA("TextButton") then c:Destroy() end
+	end
+	local count = 0
+	for _, plr in ipairs(Players:GetPlayers()) do
+		if plr ~= LocalPlayer then
+			local btn = Instance.new("TextButton")
+			btn.Size = UDim2.new(1, -8, 0, 34)
+			btn.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
+			btn.Font = Enum.Font.RobotoMono
+			btn.Text = "> " .. plr.DisplayName .. " (" .. plr.Name .. ")"
+			btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+			btn.TextSize = 11
+			btn.TextXAlignment = Enum.TextXAlignment.Left
+			btn.Parent = TpListFrame
+			addOutline(btn, Color3.fromRGB(45, 45, 50), 1)
+			addCorner(btn, 4)
+			count = count + 1
+			btn.MouseButton1Click:Connect(function()
+				local tc = plr.Character
+				if not tc then return end
+				local tr = tc:FindFirstChild("HumanoidRootPart")
+				if not tr then return end
+				local mc = LocalPlayer.Character
+				if not mc then return end
+				local mr = mc:FindFirstChild("HumanoidRootPart")
+				if not mr then return end
+				mr.CFrame = tr.CFrame * CFrame.new(0, 0, -2)
+				TpListFrame.Visible = false
+				TpBtn.Text = "// TP TO PLAYER"
+			end)
+		end
+	end
+	TpListLayout:ApplyLayout()
+	TpListFrame.CanvasSize = UDim2.new(0, 0, 0, count * 38 + 10)
+end
+
+TpBtn.MouseButton1Click:Connect(function()
+	if TpListFrame.Visible then
+		TpListFrame.Visible = false
+		TpBtn.Text = "// TP TO PLAYER"
+	else
+		buildTpList()
+		TpListFrame.Visible = true
+		TpBtn.Text = "// CLOSE LIST"
+	end
+end)
+
+-- Chat Spam knop
+local chatSpamming = false
+local chatSpamThread = nil
+
+local ChatSpamBtn = Instance.new("TextButton")
+ChatSpamBtn.Parent = MiscFrame
+ChatSpamBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+ChatSpamBtn.Position = UDim2.new(0, 0, 0, 272)
+ChatSpamBtn.Size = UDim2.new(1, 0, 0, 45)
+ChatSpamBtn.Font = Enum.Font.RobotoMono
+ChatSpamBtn.Text = "// CHAT SPAM"
+ChatSpamBtn.TextColor3 = accentColor
+ChatSpamBtn.TextSize = 14
+addOutline(ChatSpamBtn, Color3.fromRGB(40, 40, 45), 1)
+addCorner(ChatSpamBtn, 4)
+
+local function stopChatSpam()
+	chatSpamming = false
+	if chatSpamThread then
+		task.cancel(chatSpamThread)
+		chatSpamThread = nil
+	end
+	ChatSpamBtn.Text = "// CHAT SPAM"
+	ChatSpamBtn.TextColor3 = accentColor
+	ChatSpamBtn.UIStroke.Color = Color3.fromRGB(40, 40, 45)
+end
+
+local function startChatSpam()
+	chatSpamming = true
+	ChatSpamBtn.Text = "// STOP SPAM"
+	ChatSpamBtn.TextColor3 = Color3.fromRGB(50, 255, 50)
+	ChatSpamBtn.UIStroke.Color = Color3.fromRGB(50, 255, 50)
+	chatSpamThread = task.spawn(function()
+		while chatSpamming do
+			local ok, chatService = pcall(function()
+				return game:GetService("Chat")
+			end)
+			if ok and chatService then
+				pcall(function()
+					game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("BununXD is the goat", "All")
+				end)
+			end
+			task.wait(3)
+		end
+	end)
+end
+
+ChatSpamBtn.MouseButton1Click:Connect(function()
+	if chatSpamming then
+		stopChatSpam()
+	else
+		startChatSpam()
+	end
+end)
+
+--- ========================================== ---
+-- [[ ESP FRAME ]] --
+--- ========================================== ---
+
+local EspLabel = Instance.new("TextLabel")
+EspLabel.Parent = EspFrame
+EspLabel.BackgroundTransparency = 1
+EspLabel.Position = UDim2.new(0, 0, 0, 10)
+EspLabel.Size = UDim2.new(1, 0, 0, 20)
+EspLabel.Font = Enum.Font.RobotoMono
+EspLabel.Text = "// ESP"
+EspLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
+EspLabel.TextSize = 13
+EspLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local EspButton = Instance.new("TextButton")
+EspButton.Parent = EspFrame
+EspButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+EspButton.Position = UDim2.new(0, 0, 0, 38)
+EspButton.Size = UDim2.new(1, 0, 0, 45)
+EspButton.Font = Enum.Font.RobotoMono
+EspButton.Text = "// ESP: OFF"
+EspButton.TextColor3 = accentColor
+EspButton.TextSize = 14
+addOutline(EspButton, Color3.fromRGB(40, 40, 45), 1)
+addCorner(EspButton, 4)
+
+--- ========================================== ---
 -- [[ SETTINGS FRAME ]] --
+--- ========================================== ---
+
 local SettingsLabel = Instance.new("TextLabel")
 SettingsLabel.Parent = SettingsFrame
 SettingsLabel.BackgroundTransparency = 1
 SettingsLabel.Position = UDim2.new(0, 0, 0, 10)
-SettingsLabel.Size = UDim2.new(1, 0, 0, 30)
+SettingsLabel.Size = UDim2.new(1, 0, 0, 20)
 SettingsLabel.Font = Enum.Font.RobotoMono
 SettingsLabel.Text = "// SETTINGS"
 SettingsLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
 SettingsLabel.TextSize = 13
 SettingsLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+local SettingsKeybindLabel = Instance.new("TextLabel")
+SettingsKeybindLabel.Parent = SettingsFrame
+SettingsKeybindLabel.BackgroundTransparency = 1
+SettingsKeybindLabel.Position = UDim2.new(0, 0, 0, 38)
+SettingsKeybindLabel.Size = UDim2.new(1, 0, 0, 16)
+SettingsKeybindLabel.Font = Enum.Font.RobotoMono
+SettingsKeybindLabel.Text = "> TOGGLE HOTKEY:"
+SettingsKeybindLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+SettingsKeybindLabel.TextSize = 11
+SettingsKeybindLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local SettingsKeybindBtn = Instance.new("TextButton")
+SettingsKeybindBtn.Parent = SettingsFrame
+SettingsKeybindBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+SettingsKeybindBtn.Position = UDim2.new(0, 0, 0, 58)
+SettingsKeybindBtn.Size = UDim2.new(1, 0, 0, 34)
+SettingsKeybindBtn.Font = Enum.Font.RobotoMono
+SettingsKeybindBtn.Text = "BIND: LAlt"
+SettingsKeybindBtn.TextColor3 = accentColor
+SettingsKeybindBtn.TextSize = 12
+addOutline(SettingsKeybindBtn, Color3.fromRGB(40, 40, 45), 1)
+addCorner(SettingsKeybindBtn, 4)
+
+local ColorLabel = Instance.new("TextLabel")
+ColorLabel.Parent = SettingsFrame
+ColorLabel.BackgroundTransparency = 1
+ColorLabel.Position = UDim2.new(0, 0, 0, 104)
+ColorLabel.Size = UDim2.new(1, 0, 0, 16)
+ColorLabel.Font = Enum.Font.RobotoMono
+ColorLabel.Text = "> UI ACCENT COLOR:"
+ColorLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+ColorLabel.TextSize = 11
+ColorLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local colorOptions = {
+	{name = "RED",    color = Color3.fromRGB(255, 40, 40)},
+	{name = "BLUE",   color = Color3.fromRGB(40, 120, 255)},
+	{name = "GREEN",  color = Color3.fromRGB(50, 220, 80)},
+	{name = "PURPLE", color = Color3.fromRGB(160, 60, 255)},
+	{name = "CYAN",   color = Color3.fromRGB(40, 220, 220)},
+	{name = "WHITE",  color = Color3.fromRGB(220, 220, 220)},
+}
+
+local colorBtns = {}
+for i, opt in ipairs(colorOptions) do
+	local col = math.floor((i - 1) % 3)
+	local row = math.floor((i - 1) / 3)
+	local cb = Instance.new("TextButton")
+	cb.Parent = SettingsFrame
+	cb.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
+	cb.Position = UDim2.new(0, col * 96, 0, 124 + row * 42)
+	cb.Size = UDim2.new(0, 88, 0, 34)
+	cb.Font = Enum.Font.RobotoMono
+	cb.Text = opt.name
+	cb.TextColor3 = opt.color
+	cb.TextSize = 11
+	addOutline(cb, opt.color, 1)
+	addCorner(cb, 4)
+	colorBtns[i] = {btn = cb, color = opt.color}
+end
+
 local UnloadBtn = Instance.new("TextButton")
 UnloadBtn.Parent = SettingsFrame
 UnloadBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-UnloadBtn.Position = UDim2.new(0, 0, 0, 55)
+UnloadBtn.Position = UDim2.new(0, 0, 0, 215)
 UnloadBtn.Size = UDim2.new(1, 0, 0, 45)
 UnloadBtn.Font = Enum.Font.RobotoMono
 UnloadBtn.Text = "// UNLOAD SCRIPT"
-UnloadBtn.TextColor3 = Color3.fromRGB(255, 40, 40)
+UnloadBtn.TextColor3 = accentColor
 UnloadBtn.TextSize = 14
 addOutline(UnloadBtn, Color3.fromRGB(40, 40, 45), 1)
 addCorner(UnloadBtn, 4)
+
+--- ========================================== ---
+-- [[ KLEUR AANPASSEN ]] --
+--- ========================================== ---
+
+local espHighlights = {}
+
+local function isNeutralColor(c)
+	local r, g, b = c.R, c.G, c.B
+	return math.abs(r - g) < 0.02 and math.abs(g - b) < 0.02 and r < 0.25
+end
+
+local function applyAccentColor(newColor)
+	accentColor = newColor
+
+	for _, desc in ipairs(ScreenGui:GetDescendants()) do
+		if desc:IsA("UIStroke") and not isNeutralColor(desc.Color) then
+			desc.Color = newColor
+		end
+	end
+
+	Title.TextColor3 = newColor
+	FlyButton.TextColor3 = newColor
+	NoclipButton.TextColor3 = newColor
+	InfiniteJumpButton.TextColor3 = newColor
+	SpeedValueLabel.TextColor3 = newColor
+	JumpValueLabel.TextColor3 = newColor
+	SettingsKeybindBtn.TextColor3 = newColor
+	TpBtn.TextColor3 = newColor
+	EspButton.TextColor3 = newColor
+	UnloadBtn.TextColor3 = newColor
+	TooltipLabel.TextColor3 = newColor
+	ChatSpamBtn.TextColor3 = newColor
+
+	PlayerScroll.ScrollBarImageColor3 = newColor
+	TpListFrame.ScrollBarImageColor3 = newColor
+
+	SpeedSliderFill.BackgroundColor3 = newColor
+	SpeedSliderKnob.UIStroke.Color = newColor
+	JumpSliderFill.BackgroundColor3 = newColor
+	JumpSliderKnob.UIStroke.Color = newColor
+	MainFrame.UIStroke.Color = newColor
+
+	-- ESP highlights live updaten
+	for _, h in pairs(espHighlights) do
+		if h and h.Parent then
+			h.OutlineColor = newColor
+		end
+	end
+
+	for _, tab in ipairs({
+		{btn = PlayerTabBtn,   frame = PlayerScroll},
+		{btn = MiscTabBtn,     frame = MiscFrame},
+		{btn = SettingsTabBtn, frame = SettingsFrame},
+		{btn = EspTabBtn,      frame = EspFrame},
+	}) do
+		if tab.frame.Visible then
+			tab.btn.TextColor3 = newColor
+		end
+	end
+end
+
+for _, entry in ipairs(colorBtns) do
+	entry.btn.MouseButton1Click:Connect(function()
+		applyAccentColor(entry.color)
+	end)
+end
 
 --- ========================================== ---
 -- [[ LOGICA: TABS & KEYBIND ]] --
 --- ========================================== ---
 
 local allTabs = {
-	{btn = PlayerTabBtn, frame = PlayerFrame, name = "PLAYER"},
-	{btn = MiscTabBtn, frame = MiscFrame, name = "MISC"},
+	{btn = PlayerTabBtn,   frame = PlayerScroll,  name = "PLAYER"},
+	{btn = MiscTabBtn,     frame = MiscFrame,     name = "MISC"},
 	{btn = SettingsTabBtn, frame = SettingsFrame, name = "SETTINGS"},
+	{btn = EspTabBtn,      frame = EspFrame,      name = "ESP"},
 }
 
 local function switchTab(activeBtn, activeFrame)
@@ -348,30 +782,36 @@ local function switchTab(activeBtn, activeFrame)
 		tab.btn.Text = "[ ] " .. tab.name
 	end
 	activeFrame.Visible = true
-	activeBtn.TextColor3 = Color3.fromRGB(255, 40, 40)
+	activeBtn.TextColor3 = accentColor
 	activeBtn.Text = "[X] " .. string.match(activeBtn.Text, "%] (.+)$")
 end
-switchTab(PlayerTabBtn, PlayerFrame)
+switchTab(PlayerTabBtn, PlayerScroll)
 
-PlayerTabBtn.MouseButton1Click:Connect(function() switchTab(PlayerTabBtn, PlayerFrame) end)
+PlayerTabBtn.MouseButton1Click:Connect(function() switchTab(PlayerTabBtn, PlayerScroll) end)
 MiscTabBtn.MouseButton1Click:Connect(function() switchTab(MiscTabBtn, MiscFrame) end)
 SettingsTabBtn.MouseButton1Click:Connect(function() switchTab(SettingsTabBtn, SettingsFrame) end)
+EspTabBtn.MouseButton1Click:Connect(function() switchTab(EspTabBtn, EspFrame) end)
 
 local currentKey = Enum.KeyCode.LeftAlt
 local listening = false
 
-KeybindBtn.MouseButton1Click:Connect(function()
-	listening = true
-	KeybindBtn.Text = "BIND: ..."
-	KeybindBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-end)
+local function setListening(state)
+	listening = state
+	if state then
+		SettingsKeybindBtn.Text = "BIND: ..."
+		SettingsKeybindBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	end
+end
+
+SettingsKeybindBtn.MouseButton1Click:Connect(function() setListening(true) end)
 
 UserInputService.InputBegan:Connect(function(input, gpe)
 	if listening and input.UserInputType == Enum.UserInputType.Keyboard then
 		currentKey = input.KeyCode
 		listening = false
-		KeybindBtn.Text = "BIND: " .. input.KeyCode.Name
-		KeybindBtn.TextColor3 = Color3.fromRGB(255, 40, 40)
+		local bindText = "BIND: " .. input.KeyCode.Name
+		SettingsKeybindBtn.Text = bindText
+		SettingsKeybindBtn.TextColor3 = accentColor
 		return
 	end
 	if gpe then return end
@@ -386,15 +826,14 @@ end)
 
 local minSpeed = 8
 local maxSpeed = 150
-local draggingSlider = false
+local draggingSpeedSlider = false
 
-local function updateSlider(xRatio)
+local function updateSpeedSlider(xRatio)
 	xRatio = math.clamp(xRatio, 0, 1)
 	walkSpeedValue = math.floor(minSpeed + (maxSpeed - minSpeed) * xRatio)
 	SpeedSliderFill.Size = UDim2.new(xRatio, 0, 1, 0)
 	SpeedSliderKnob.Position = UDim2.new(xRatio, -6, 0.5, -6)
 	SpeedValueLabel.Text = tostring(walkSpeedValue)
-
 	local char = LocalPlayer.Character
 	if char then
 		local hum = char:FindFirstChild("Humanoid")
@@ -402,35 +841,223 @@ local function updateSlider(xRatio)
 	end
 end
 
-SpeedSliderKnob.MouseButton1Down:Connect(function()
-	draggingSlider = true
-end)
-
+SpeedSliderKnob.MouseButton1Down:Connect(function() draggingSpeedSlider = true end)
 SpeedSliderTrack.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		draggingSlider = true
-		local trackPos = SpeedSliderTrack.AbsolutePosition.X
-		local trackSize = SpeedSliderTrack.AbsoluteSize.X
-		local ratio = (input.Position.X - trackPos) / trackSize
-		updateSlider(ratio)
+		draggingSpeedSlider = true
+		local ratio = (input.Position.X - SpeedSliderTrack.AbsolutePosition.X) / SpeedSliderTrack.AbsoluteSize.X
+		updateSpeedSlider(ratio)
+	end
+end)
+
+--- ========================================== ---
+-- [[ LOGICA: JUMP SLIDER ]] --
+--- ========================================== ---
+
+local minJump = 7
+local maxJump = 200
+local draggingJumpSlider = false
+
+local function updateJumpSlider(xRatio)
+	xRatio = math.clamp(xRatio, 0, 1)
+	jumpHeightValue = math.floor(minJump + (maxJump - minJump) * xRatio)
+	JumpSliderFill.Size = UDim2.new(xRatio, 0, 1, 0)
+	JumpSliderKnob.Position = UDim2.new(xRatio, -6, 0.5, -6)
+	JumpValueLabel.Text = tostring(jumpHeightValue)
+	local char = LocalPlayer.Character
+	if char then
+		local hum = char:FindFirstChild("Humanoid")
+		if hum then hum.JumpPower = jumpHeightValue end
+	end
+end
+
+JumpSliderKnob.MouseButton1Down:Connect(function() draggingJumpSlider = true end)
+JumpSliderTrack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		draggingJumpSlider = true
+		local ratio = (input.Position.X - JumpSliderTrack.AbsolutePosition.X) / JumpSliderTrack.AbsoluteSize.X
+		updateJumpSlider(ratio)
 	end
 end)
 
 RunService.RenderStepped:Connect(function()
-	if draggingSlider then
+	if draggingSpeedSlider then
 		local mousePos = UserInputService:GetMouseLocation()
-		local trackPos = SpeedSliderTrack.AbsolutePosition.X
-		local trackSize = SpeedSliderTrack.AbsoluteSize.X
-		local ratio = (mousePos.X - trackPos) / trackSize
-		updateSlider(ratio)
+		local ratio = (mousePos.X - SpeedSliderTrack.AbsolutePosition.X) / SpeedSliderTrack.AbsoluteSize.X
+		updateSpeedSlider(ratio)
+	end
+	if draggingJumpSlider then
+		local mousePos = UserInputService:GetMouseLocation()
+		local ratio = (mousePos.X - JumpSliderTrack.AbsolutePosition.X) / JumpSliderTrack.AbsoluteSize.X
+		updateJumpSlider(ratio)
 	end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		draggingSlider = false
+		draggingSpeedSlider = false
+		draggingJumpSlider = false
 	end
 end)
+
+--- ========================================== ---
+-- [[ LOGICA: NOCLIP ]] --
+--- ========================================== ---
+
+local noclipEnabled = false
+local noclipConnection = nil
+
+local function setNoclip(enabled)
+	noclipEnabled = enabled
+	if enabled then
+		NoclipButton.Text = "// TOGGLE NOCLIP: ON"
+		NoclipButton.TextColor3 = Color3.fromRGB(50, 255, 50)
+		NoclipButton.UIStroke.Color = Color3.fromRGB(50, 255, 50)
+		noclipConnection = RunService.Stepped:Connect(function()
+			local char = LocalPlayer.Character
+			if not char then return end
+			for _, part in ipairs(char:GetDescendants()) do
+				if part:IsA("BasePart") then part.CanCollide = false end
+			end
+		end)
+	else
+		NoclipButton.Text = "// TOGGLE NOCLIP: OFF"
+		NoclipButton.TextColor3 = accentColor
+		NoclipButton.UIStroke.Color = Color3.fromRGB(40, 40, 45)
+		if noclipConnection then noclipConnection:Disconnect() noclipConnection = nil end
+		local char = LocalPlayer.Character
+		if char then
+			for _, part in ipairs(char:GetDescendants()) do
+				if part:IsA("BasePart") then part.CanCollide = true end
+			end
+		end
+	end
+end
+
+NoclipButton.MouseButton1Click:Connect(function() setNoclip(not noclipEnabled) end)
+
+--- ========================================== ---
+-- [[ LOGICA: INFINITE JUMP ]] --
+--- ========================================== ---
+
+local infiniteJumpEnabled = false
+local jumpConnection = nil
+
+local function setInfiniteJump(enabled)
+	infiniteJumpEnabled = enabled
+	if enabled then
+		InfiniteJumpButton.Text = "// INFINITE JUMP: ON"
+		InfiniteJumpButton.TextColor3 = Color3.fromRGB(50, 255, 50)
+		InfiniteJumpButton.UIStroke.Color = Color3.fromRGB(50, 255, 50)
+		jumpConnection = UserInputService.JumpRequest:Connect(function()
+			local char = LocalPlayer.Character
+			if not char then return end
+			local hum = char:FindFirstChild("Humanoid")
+			if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
+		end)
+	else
+		InfiniteJumpButton.Text = "// INFINITE JUMP: OFF"
+		InfiniteJumpButton.TextColor3 = accentColor
+		InfiniteJumpButton.UIStroke.Color = Color3.fromRGB(40, 40, 45)
+		if jumpConnection then jumpConnection:Disconnect() jumpConnection = nil end
+	end
+end
+
+InfiniteJumpButton.MouseButton1Click:Connect(function() setInfiniteJump(not infiniteJumpEnabled) end)
+
+--- ========================================== ---
+-- [[ LOGICA: ESP — VOLLEDIG GEFIXED ]] --
+--- ========================================== ---
+
+local espEnabled = false
+local espConnections = {}
+
+-- FIX: verwijder ALLE highlights inclusief nieuwe character spawns
+local function removeEsp()
+	-- Stop alle character-added connections
+	for _, conn in pairs(espConnections) do
+		if conn then pcall(function() conn:Disconnect() end) end
+	end
+	espConnections = {}
+
+	-- Verwijder alle bestaande highlights
+	for _, h in pairs(espHighlights) do
+		if h and h.Parent then
+			pcall(function() h:Destroy() end)
+		end
+	end
+	espHighlights = {}
+
+	-- Extra zekerheid: loop door alle spelers en verwijder eventuele overgebleven highlights
+	for _, plr in ipairs(Players:GetPlayers()) do
+		if plr ~= LocalPlayer and plr.Character then
+			for _, obj in ipairs(plr.Character:GetChildren()) do
+				if obj:IsA("Highlight") then
+					pcall(function() obj:Destroy() end)
+				end
+			end
+		end
+	end
+end
+
+local function addHighlightToChar(char, plrName)
+	-- Verwijder eventuele oude highlight eerst
+	for _, obj in ipairs(char:GetChildren()) do
+		if obj:IsA("Highlight") then pcall(function() obj:Destroy() end) end
+	end
+	local h = Instance.new("Highlight")
+	h.Parent = char
+	h.FillTransparency = 1
+	h.OutlineColor = accentColor
+	h.OutlineTransparency = 0
+	espHighlights[plrName] = h
+end
+
+local function addEsp()
+	for _, plr in ipairs(Players:GetPlayers()) do
+		if plr ~= LocalPlayer then
+			if plr.Character then
+				addHighlightToChar(plr.Character, plr.Name)
+			end
+			-- Bijhouden als speler respawnt
+			local conn = plr.CharacterAdded:Connect(function(char)
+				if not espEnabled then return end
+				task.wait(0.5)
+				addHighlightToChar(char, plr.Name)
+			end)
+			table.insert(espConnections, conn)
+		end
+	end
+
+	-- Nieuwe spelers die joinen
+	local playerAddedConn = Players.PlayerAdded:Connect(function(plr)
+		if not espEnabled then return end
+		local conn = plr.CharacterAdded:Connect(function(char)
+			if not espEnabled then return end
+			task.wait(0.5)
+			addHighlightToChar(char, plr.Name)
+		end)
+		table.insert(espConnections, conn)
+	end)
+	table.insert(espConnections, playerAddedConn)
+end
+
+local function setEsp(enabled)
+	espEnabled = enabled
+	if enabled then
+		EspButton.Text = "// ESP: ON"
+		EspButton.TextColor3 = Color3.fromRGB(50, 255, 50)
+		EspButton.UIStroke.Color = Color3.fromRGB(50, 255, 50)
+		addEsp()
+	else
+		EspButton.Text = "// ESP: OFF"
+		EspButton.TextColor3 = accentColor
+		EspButton.UIStroke.Color = Color3.fromRGB(40, 40, 45)
+		removeEsp()
+	end
+end
+
+EspButton.MouseButton1Click:Connect(function() setEsp(not espEnabled) end)
 
 --- ========================================== ---
 -- [[ LOGICA: CLASSIC FLY ENGINE ]] --
@@ -446,12 +1073,12 @@ local function updateSpeedVisuals(activeBtn)
 	Mode1Btn.UIStroke.Color = Color3.fromRGB(45, 45, 50)
 	Mode2Btn.UIStroke.Color = Color3.fromRGB(45, 45, 50)
 	Mode3Btn.UIStroke.Color = Color3.fromRGB(45, 45, 50)
-	activeBtn.UIStroke.Color = Color3.fromRGB(255, 40, 40)
+	activeBtn.UIStroke.Color = accentColor
 end
 local function updateStyleVisuals(activeBtn)
 	NormalStyleBtn.UIStroke.Color = Color3.fromRGB(45, 45, 50)
 	SupermanStyleBtn.UIStroke.Color = Color3.fromRGB(45, 45, 50)
-	activeBtn.UIStroke.Color = Color3.fromRGB(255, 40, 40)
+	activeBtn.UIStroke.Color = accentColor
 end
 
 updateSpeedVisuals(Mode1Btn)
@@ -460,7 +1087,6 @@ updateStyleVisuals(NormalStyleBtn)
 Mode1Btn.MouseButton1Click:Connect(function() flySpeed = speeds.Mode1 updateSpeedVisuals(Mode1Btn) end)
 Mode2Btn.MouseButton1Click:Connect(function() flySpeed = speeds.Mode2 updateSpeedVisuals(Mode2Btn) end)
 Mode3Btn.MouseButton1Click:Connect(function() flySpeed = speeds.Mode3 updateSpeedVisuals(Mode3Btn) end)
-
 NormalStyleBtn.MouseButton1Click:Connect(function() flyStyle = "Normal" updateStyleVisuals(NormalStyleBtn) end)
 SupermanStyleBtn.MouseButton1Click:Connect(function() flyStyle = "Superman" updateStyleVisuals(SupermanStyleBtn) end)
 
@@ -487,37 +1113,26 @@ local function startClassicFly()
 	local root = char:WaitForChild("HumanoidRootPart", 5)
 	local hum = char:WaitForChild("Humanoid", 5)
 	if not root or not hum then return end
-
 	local cam = workspace.CurrentCamera
 	hum.PlatformStand = true
-
 	originalGravity = workspace.Gravity
 	workspace.Gravity = 0
-
-	if flyStyle == "Superman" then
-		playSafeSupermanAnim(hum)
-	end
-
+	if flyStyle == "Superman" then playSafeSupermanAnim(hum) end
 	connectionFly = RunService.RenderStepped:Connect(function()
 		if not root or not hum then return end
-
 		root.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
 		root.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
-
 		local inputVector = Vector3.new(0, 0, 0)
 		if UserInputService:IsKeyDown(Enum.KeyCode.W) then inputVector = inputVector + cam.CFrame.LookVector end
 		if UserInputService:IsKeyDown(Enum.KeyCode.S) then inputVector = inputVector - cam.CFrame.LookVector end
 		if UserInputService:IsKeyDown(Enum.KeyCode.A) then inputVector = inputVector - cam.CFrame.RightVector end
 		if UserInputService:IsKeyDown(Enum.KeyCode.D) then inputVector = inputVector + cam.CFrame.RightVector end
-
 		if inputVector.Magnitude > 0 then
 			targetMoveVector = inputVector.Unit * flySpeed
 		else
 			targetMoveVector = Vector3.new(0, 0, 0)
 		end
-
 		currentMoveVector = currentMoveVector:Lerp(targetMoveVector, 0.2)
-
 		if flyStyle == "Superman" then
 			local targetCFrame
 			if currentMoveVector.Magnitude > 0.05 then
@@ -537,14 +1152,11 @@ end
 local function stopClassicFly()
 	flying = false
 	FlyButton.Text = "// TOGGLE FLY: OFF"
-	FlyButton.TextColor3 = Color3.fromRGB(255, 40, 40)
+	FlyButton.TextColor3 = accentColor
 	FlyButton.UIStroke.Color = Color3.fromRGB(40, 40, 45)
-
 	workspace.Gravity = originalGravity
-
 	if connectionFly then connectionFly:Disconnect() connectionFly = nil end
 	if flyAnimTrack then pcall(function() flyAnimTrack:Stop() flyAnimTrack:Destroy() end) flyAnimTrack = nil end
-
 	local char = LocalPlayer.Character
 	if char then
 		local hum = char:FindFirstChild("Humanoid")
@@ -566,8 +1178,10 @@ end)
 
 LocalPlayer.CharacterAdded:Connect(function(char)
 	stopClassicFly()
+	if noclipEnabled then setNoclip(false) end
 	local hum = char:WaitForChild("Humanoid")
 	hum.WalkSpeed = walkSpeedValue
+	hum.JumpPower = jumpHeightValue
 end)
 
 --- ========================================== ---
@@ -576,11 +1190,16 @@ end)
 
 UnloadBtn.MouseButton1Click:Connect(function()
 	stopClassicFly()
+	setNoclip(false)
+	setInfiniteJump(false)
+	setEsp(false)
+	stopChatSpam()
 	local char = LocalPlayer.Character
 	if char then
 		local hum = char:FindFirstChild("Humanoid")
 		if hum then
 			hum.WalkSpeed = 16
+			hum.JumpPower = 50
 			hum.PlatformStand = false
 		end
 	end
