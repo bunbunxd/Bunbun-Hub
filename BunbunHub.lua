@@ -13,10 +13,12 @@ local PlayerTabBtn = Instance.new("TextButton")
 local MiscTabBtn = Instance.new("TextButton")
 local SettingsTabBtn = Instance.new("TextButton")
 local EspTabBtn = Instance.new("TextButton")
+local EmotesTabBtn = Instance.new("TextButton")
 local PlayerScroll = Instance.new("ScrollingFrame")
 local MiscFrame = Instance.new("Frame")
 local SettingsFrame = Instance.new("Frame")
 local EspFrame = Instance.new("Frame")
+local EmotesFrame = Instance.new("Frame")
 
 -- Elementen in Player Tab
 local FlyButton = Instance.new("TextButton")
@@ -51,8 +53,7 @@ local JumpSliderFill = Instance.new("Frame")
 local JumpSliderKnob = Instance.new("TextButton")
 local JumpValueLabel = Instance.new("TextLabel")
 
--- Noclip & Infinite Jump
-local NoclipButton = Instance.new("TextButton")
+-- Infinite Jump
 local InfiniteJumpButton = Instance.new("TextButton")
 
 -- UI kleur state
@@ -114,7 +115,7 @@ MainFrame.Active = true
 addOutline(MainFrame, accentColor, 1)
 addCorner(MainFrame, 6)
 
--- Tooltip — breedte auto via TextBounds, vaste kleine hoogte
+-- Tooltip
 TooltipLabel.Parent = ScreenGui
 TooltipLabel.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 TooltipLabel.AutomaticSize = Enum.AutomaticSize.X
@@ -184,7 +185,7 @@ Title.TextXAlignment = Enum.TextXAlignment.Left
 TabContainer.Parent = LeftPanel
 TabContainer.BackgroundTransparency = 1
 TabContainer.Position = UDim2.new(0, 10, 0, 60)
-TabContainer.Size = UDim2.new(1, -20, 0, 175)
+TabContainer.Size = UDim2.new(1, -20, 0, 210)
 
 local function styleTabBtn(btn, text, pos)
 	btn.Parent = TabContainer
@@ -197,22 +198,22 @@ local function styleTabBtn(btn, text, pos)
 	btn.TextSize = 13
 	btn.TextXAlignment = Enum.TextXAlignment.Left
 end
-styleTabBtn(PlayerTabBtn, "PLAYER", UDim2.new(0, 0, 0, 0))
-styleTabBtn(MiscTabBtn, "MISC", UDim2.new(0, 0, 0, 35))
+styleTabBtn(PlayerTabBtn,   "PLAYER",   UDim2.new(0, 0, 0, 0))
+styleTabBtn(MiscTabBtn,     "MISC",     UDim2.new(0, 0, 0, 35))
 styleTabBtn(SettingsTabBtn, "SETTINGS", UDim2.new(0, 0, 0, 70))
-styleTabBtn(EspTabBtn, "ESP", UDim2.new(0, 0, 0, 105))
+styleTabBtn(EspTabBtn,      "ESP",      UDim2.new(0, 0, 0, 105))
+styleTabBtn(EmotesTabBtn,   "EMOTES",   UDim2.new(0, 0, 0, 140))
 
 ContentContainer.Parent = MainFrame
 ContentContainer.BackgroundTransparency = 1
 ContentContainer.Position = UDim2.new(0, 140, 0, 15)
 ContentContainer.Size = UDim2.new(1, -155, 1, -30)
 
--- PlayerScroll — canvas vergroot voor jump slider
 PlayerScroll.Name = "PlayerScroll"
 PlayerScroll.Parent = ContentContainer
 PlayerScroll.BackgroundTransparency = 1
 PlayerScroll.Size = UDim2.new(1, 0, 1, 0)
-PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, 580)
+PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, 530)
 PlayerScroll.ScrollBarThickness = 3
 PlayerScroll.ScrollBarImageColor3 = accentColor
 PlayerScroll.Visible = true
@@ -226,9 +227,10 @@ local function createPage(name)
 	f.Visible = false
 	return f
 end
-MiscFrame = createPage("MiscFrame")
+MiscFrame     = createPage("MiscFrame")
 SettingsFrame = createPage("SettingsFrame")
-EspFrame = createPage("EspFrame")
+EspFrame      = createPage("EspFrame")
+EmotesFrame   = createPage("EmotesFrame")
 
 -- FlyButton
 FlyButton.Parent = PlayerScroll
@@ -404,22 +406,10 @@ JumpSliderKnob.Text = ""
 addCorner(JumpSliderKnob, 6)
 addOutline(JumpSliderKnob, accentColor, 1)
 
--- Noclip
-NoclipButton.Parent = PlayerScroll
-NoclipButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-NoclipButton.Position = UDim2.new(0, 0, 0, 450)
-NoclipButton.Size = UDim2.new(1, 0, 0, 45)
-NoclipButton.Font = Enum.Font.RobotoMono
-NoclipButton.Text = "// TOGGLE NOCLIP: OFF"
-NoclipButton.TextColor3 = accentColor
-NoclipButton.TextSize = 14
-addOutline(NoclipButton, Color3.fromRGB(40, 40, 45), 1)
-addCorner(NoclipButton, 4)
-
 -- Infinite Jump
 InfiniteJumpButton.Parent = PlayerScroll
 InfiniteJumpButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-InfiniteJumpButton.Position = UDim2.new(0, 0, 0, 510)
+InfiniteJumpButton.Position = UDim2.new(0, 0, 0, 450)
 InfiniteJumpButton.Size = UDim2.new(1, 0, 0, 45)
 InfiniteJumpButton.Font = Enum.Font.RobotoMono
 InfiniteJumpButton.Text = "// INFINITE JUMP: OFF"
@@ -432,8 +422,16 @@ addCorner(InfiniteJumpButton, 4)
 -- [[ MISC FRAME ]] --
 --- ========================================== ---
 
+local MiscScroll = Instance.new("ScrollingFrame")
+MiscScroll.Parent = MiscFrame
+MiscScroll.BackgroundTransparency = 1
+MiscScroll.Size = UDim2.new(1, 0, 1, 0)
+MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 380)
+MiscScroll.ScrollBarThickness = 3
+MiscScroll.ScrollBarImageColor3 = accentColor
+
 local MiscLabel = Instance.new("TextLabel")
-MiscLabel.Parent = MiscFrame
+MiscLabel.Parent = MiscScroll
 MiscLabel.BackgroundTransparency = 1
 MiscLabel.Position = UDim2.new(0, 0, 0, 10)
 MiscLabel.Size = UDim2.new(1, 0, 0, 20)
@@ -443,8 +441,9 @@ MiscLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
 MiscLabel.TextSize = 13
 MiscLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+-- TP TO PLAYER knop
 local TpBtn = Instance.new("TextButton")
-TpBtn.Parent = MiscFrame
+TpBtn.Parent = MiscScroll
 TpBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 TpBtn.Position = UDim2.new(0, 0, 0, 38)
 TpBtn.Size = UDim2.new(1, 0, 0, 38)
@@ -456,10 +455,10 @@ addOutline(TpBtn, Color3.fromRGB(40, 40, 45), 1)
 addCorner(TpBtn, 4)
 
 local TpListFrame = Instance.new("ScrollingFrame")
-TpListFrame.Parent = MiscFrame
+TpListFrame.Parent = MiscScroll
 TpListFrame.BackgroundColor3 = bgMid
 TpListFrame.Position = UDim2.new(0, 0, 0, 84)
-TpListFrame.Size = UDim2.new(1, 0, 0, 180)
+TpListFrame.Size = UDim2.new(1, 0, 0, 0) -- start ingeklapt
 TpListFrame.ScrollBarThickness = 4
 TpListFrame.ScrollBarImageColor3 = accentColor
 TpListFrame.Visible = false
@@ -477,6 +476,34 @@ TpListPadding.Parent = TpListFrame
 TpListPadding.PaddingTop = UDim.new(0, 6)
 TpListPadding.PaddingLeft = UDim.new(0, 6)
 TpListPadding.PaddingRight = UDim.new(0, 6)
+
+-- Chat Spam knop — direct onder de TP knop (of lijst)
+local ChatSpamBtn = Instance.new("TextButton")
+ChatSpamBtn.Parent = MiscScroll
+ChatSpamBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+ChatSpamBtn.Position = UDim2.new(0, 0, 0, 90) -- standaard positie als lijst dicht is
+ChatSpamBtn.Size = UDim2.new(1, 0, 0, 45)
+ChatSpamBtn.Font = Enum.Font.RobotoMono
+ChatSpamBtn.Text = "// CHAT SPAM"
+ChatSpamBtn.TextColor3 = accentColor
+ChatSpamBtn.TextSize = 14
+addOutline(ChatSpamBtn, Color3.fromRGB(40, 40, 45), 1)
+addCorner(ChatSpamBtn, 4)
+
+-- Herpositioneer ChatSpamBtn afhankelijk van of de lijst open/dicht is
+local function updateMiscLayout(listOpen, listHeight)
+	if listOpen then
+		TpListFrame.Size = UDim2.new(1, 0, 0, listHeight)
+		TpListFrame.Visible = true
+		ChatSpamBtn.Position = UDim2.new(0, 0, 0, 84 + listHeight + 8)
+		MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 84 + listHeight + 8 + 45 + 10)
+	else
+		TpListFrame.Visible = false
+		TpListFrame.Size = UDim2.new(1, 0, 0, 0)
+		ChatSpamBtn.Position = UDim2.new(0, 0, 0, 90)
+		MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 200)
+	end
+end
 
 local function buildTpList()
 	for _, c in ipairs(TpListFrame:GetChildren()) do
@@ -507,41 +534,36 @@ local function buildTpList()
 				local mr = mc:FindFirstChild("HumanoidRootPart")
 				if not mr then return end
 				mr.CFrame = tr.CFrame * CFrame.new(0, 0, -2)
-				TpListFrame.Visible = false
 				TpBtn.Text = "// TP TO PLAYER"
+				updateMiscLayout(false, 0)
 			end)
 		end
 	end
 	TpListLayout:ApplyLayout()
-	TpListFrame.CanvasSize = UDim2.new(0, 0, 0, count * 38 + 10)
+	local listH = math.min(count * 38 + 16, 180)
+	TpListFrame.CanvasSize = UDim2.new(0, 0, 0, count * 38 + 16)
+	return listH
 end
 
 TpBtn.MouseButton1Click:Connect(function()
 	if TpListFrame.Visible then
-		TpListFrame.Visible = false
 		TpBtn.Text = "// TP TO PLAYER"
+		updateMiscLayout(false, 0)
 	else
-		buildTpList()
-		TpListFrame.Visible = true
+		local h = buildTpList()
 		TpBtn.Text = "// CLOSE LIST"
+		updateMiscLayout(true, h)
 	end
 end)
 
--- Chat Spam knop
+updateMiscLayout(false, 0)
+
+--- ========================================== ---
+-- [[ CHAT SPAM — HEEL SNEL ]] --
+--- ========================================== ---
+
 local chatSpamming = false
 local chatSpamThread = nil
-
-local ChatSpamBtn = Instance.new("TextButton")
-ChatSpamBtn.Parent = MiscFrame
-ChatSpamBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-ChatSpamBtn.Position = UDim2.new(0, 0, 0, 272)
-ChatSpamBtn.Size = UDim2.new(1, 0, 0, 45)
-ChatSpamBtn.Font = Enum.Font.RobotoMono
-ChatSpamBtn.Text = "// CHAT SPAM"
-ChatSpamBtn.TextColor3 = accentColor
-ChatSpamBtn.TextSize = 14
-addOutline(ChatSpamBtn, Color3.fromRGB(40, 40, 45), 1)
-addCorner(ChatSpamBtn, 4)
 
 local function stopChatSpam()
 	chatSpamming = false
@@ -554,6 +576,21 @@ local function stopChatSpam()
 	ChatSpamBtn.UIStroke.Color = Color3.fromRGB(40, 40, 45)
 end
 
+local function sendChatMessage(msg)
+	pcall(function()
+		local TextChatService = game:GetService("TextChatService")
+		local channels = TextChatService:FindFirstChild("TextChannels")
+		if channels then
+			for _, ch in ipairs(channels:GetChildren()) do
+				if ch:IsA("TextChannel") then
+					ch:SendAsync(msg)
+					return
+				end
+			end
+		end
+	end)
+end
+
 local function startChatSpam()
 	chatSpamming = true
 	ChatSpamBtn.Text = "// STOP SPAM"
@@ -561,25 +598,140 @@ local function startChatSpam()
 	ChatSpamBtn.UIStroke.Color = Color3.fromRGB(50, 255, 50)
 	chatSpamThread = task.spawn(function()
 		while chatSpamming do
-			local ok, chatService = pcall(function()
-				return game:GetService("Chat")
-			end)
-			if ok and chatService then
-				pcall(function()
-					game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("BununXD is the goat", "All")
-				end)
-			end
-			task.wait(3)
+			sendChatMessage("BununXD is the goat")
+			task.wait(0.7) -- zo snel mogelijk, 0.1s is Roblox minimum
 		end
 	end)
 end
 
 ChatSpamBtn.MouseButton1Click:Connect(function()
-	if chatSpamming then
-		stopChatSpam()
-	else
-		startChatSpam()
+	if chatSpamming then stopChatSpam() else startChatSpam() end
+end)
+
+--- ========================================== ---
+-- [[ EMOTES FRAME ]] --
+--- ========================================== ---
+
+local emotesList = {
+	{name = "DANCE",      id = "rbxassetid://507771019"},
+	{name = "WAVE",       id = "rbxassetid://507770239"},
+	{name = "POINT",      id = "rbxassetid://507770453"},
+	{name = "CHEER",      id = "rbxassetid://507770677"},
+	{name = "LAUGH",      id = "rbxassetid://507770818"},
+}
+
+local EmotesScroll = Instance.new("ScrollingFrame")
+EmotesScroll.Parent = EmotesFrame
+EmotesScroll.BackgroundTransparency = 1
+EmotesScroll.Size = UDim2.new(1, 0, 1, 0)
+EmotesScroll.CanvasSize = UDim2.new(0, 0, 0, 430)
+EmotesScroll.ScrollBarThickness = 3
+EmotesScroll.ScrollBarImageColor3 = accentColor
+
+local EmotesLabel = Instance.new("TextLabel")
+EmotesLabel.Parent = EmotesScroll
+EmotesLabel.BackgroundTransparency = 1
+EmotesLabel.Position = UDim2.new(0, 0, 0, 10)
+EmotesLabel.Size = UDim2.new(1, 0, 0, 20)
+EmotesLabel.Font = Enum.Font.RobotoMono
+EmotesLabel.Text = "// SELECT EMOTE:"
+EmotesLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
+EmotesLabel.TextSize = 13
+EmotesLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local selectedEmote = nil
+local selectedEmoteBtn = nil
+local currentEmoteTrack = nil
+local emoteButtons = {}
+
+for i, emote in ipairs(emotesList) do
+	local btn = Instance.new("TextButton")
+	btn.Parent = EmotesScroll
+	btn.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
+	btn.Position = UDim2.new(0, 0, 0, 38 + (i - 1) * 48)
+	btn.Size = UDim2.new(1, 0, 0, 38)
+	btn.Font = Enum.Font.RobotoMono
+	btn.Text = "[ ] " .. emote.name
+	btn.TextColor3 = Color3.fromRGB(180, 180, 180)
+	btn.TextSize = 13
+	btn.TextXAlignment = Enum.TextXAlignment.Left
+	local pad = Instance.new("UIPadding")
+	pad.PaddingLeft = UDim.new(0, 10)
+	pad.Parent = btn
+	addOutline(btn, Color3.fromRGB(45, 45, 50), 1)
+	addCorner(btn, 4)
+	emoteButtons[i] = {btn = btn, emote = emote}
+
+	btn.MouseButton1Click:Connect(function()
+		-- deselect alle andere knoppen
+		for _, entry in ipairs(emoteButtons) do
+			entry.btn.Text = "[ ] " .. entry.emote.name
+			entry.btn.TextColor3 = Color3.fromRGB(180, 180, 180)
+			entry.btn.UIStroke.Color = Color3.fromRGB(45, 45, 50)
+		end
+		-- selecteer deze
+		selectedEmote = emote
+		selectedEmoteBtn = btn
+		btn.Text = "[X] " .. emote.name
+		btn.TextColor3 = accentColor
+		btn.UIStroke.Color = accentColor
+	end)
+end
+
+-- Play / Stop emote knop
+local PlayEmoteBtn = Instance.new("TextButton")
+PlayEmoteBtn.Parent = EmotesScroll
+PlayEmoteBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+PlayEmoteBtn.Position = UDim2.new(0, 0, 0, 38 + #emotesList * 48 + 12)
+PlayEmoteBtn.Size = UDim2.new(1, 0, 0, 45)
+PlayEmoteBtn.Font = Enum.Font.RobotoMono
+PlayEmoteBtn.Text = "// PLAY EMOTE"
+PlayEmoteBtn.TextColor3 = accentColor
+PlayEmoteBtn.TextSize = 14
+addOutline(PlayEmoteBtn, Color3.fromRGB(40, 40, 45), 1)
+addCorner(PlayEmoteBtn, 4)
+
+local emotePlaying = false
+
+local function stopEmote()
+	emotePlaying = false
+	if currentEmoteTrack then
+		pcall(function() currentEmoteTrack:Stop() end)
+		currentEmoteTrack = nil
 	end
+	PlayEmoteBtn.Text = "// PLAY EMOTE"
+	PlayEmoteBtn.TextColor3 = accentColor
+	PlayEmoteBtn.UIStroke.Color = Color3.fromRGB(40, 40, 45)
+end
+
+local function playEmote()
+	if not selectedEmote then return end
+	local char = LocalPlayer.Character
+	if not char then return end
+	local hum = char:FindFirstChild("Humanoid")
+	if not hum then return end
+	local animator = hum:FindFirstChildOfClass("Animator")
+	if not animator then return end
+	pcall(function()
+		if currentEmoteTrack then currentEmoteTrack:Stop() end
+		local anim = Instance.new("Animation")
+		anim.AnimationId = selectedEmote.id
+		currentEmoteTrack = animator:LoadAnimation(anim)
+		currentEmoteTrack.Priority = Enum.AnimationPriority.Action
+		currentEmoteTrack:Play()
+		emotePlaying = true
+		PlayEmoteBtn.Text = "// STOP EMOTING"
+		PlayEmoteBtn.TextColor3 = Color3.fromRGB(50, 255, 50)
+		PlayEmoteBtn.UIStroke.Color = Color3.fromRGB(50, 255, 50)
+		-- automatisch resetten als animatie stopt
+		currentEmoteTrack.Stopped:Connect(function()
+			if emotePlaying then stopEmote() end
+		end)
+	end)
+end
+
+PlayEmoteBtn.MouseButton1Click:Connect(function()
+	if emotePlaying then stopEmote() else playEmote() end
 end)
 
 --- ========================================== ---
@@ -610,11 +762,20 @@ addOutline(EspButton, Color3.fromRGB(40, 40, 45), 1)
 addCorner(EspButton, 4)
 
 --- ========================================== ---
--- [[ SETTINGS FRAME ]] --
+-- [[ SETTINGS FRAME (incl. NOCLIP) ]] --
 --- ========================================== ---
 
+local SettingsScroll = Instance.new("ScrollingFrame")
+SettingsScroll.Name = "SettingsScroll"
+SettingsScroll.Parent = SettingsFrame
+SettingsScroll.BackgroundTransparency = 1
+SettingsScroll.Size = UDim2.new(1, 0, 1, 0)
+SettingsScroll.CanvasSize = UDim2.new(0, 0, 0, 420)
+SettingsScroll.ScrollBarThickness = 3
+SettingsScroll.ScrollBarImageColor3 = accentColor
+
 local SettingsLabel = Instance.new("TextLabel")
-SettingsLabel.Parent = SettingsFrame
+SettingsLabel.Parent = SettingsScroll
 SettingsLabel.BackgroundTransparency = 1
 SettingsLabel.Position = UDim2.new(0, 0, 0, 10)
 SettingsLabel.Size = UDim2.new(1, 0, 0, 20)
@@ -624,10 +785,22 @@ SettingsLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
 SettingsLabel.TextSize = 13
 SettingsLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+local NoclipButton = Instance.new("TextButton")
+NoclipButton.Parent = SettingsScroll
+NoclipButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+NoclipButton.Position = UDim2.new(0, 0, 0, 38)
+NoclipButton.Size = UDim2.new(1, 0, 0, 45)
+NoclipButton.Font = Enum.Font.RobotoMono
+NoclipButton.Text = "// TOGGLE NOCLIP: OFF"
+NoclipButton.TextColor3 = accentColor
+NoclipButton.TextSize = 14
+addOutline(NoclipButton, Color3.fromRGB(40, 40, 45), 1)
+addCorner(NoclipButton, 4)
+
 local SettingsKeybindLabel = Instance.new("TextLabel")
-SettingsKeybindLabel.Parent = SettingsFrame
+SettingsKeybindLabel.Parent = SettingsScroll
 SettingsKeybindLabel.BackgroundTransparency = 1
-SettingsKeybindLabel.Position = UDim2.new(0, 0, 0, 38)
+SettingsKeybindLabel.Position = UDim2.new(0, 0, 0, 98)
 SettingsKeybindLabel.Size = UDim2.new(1, 0, 0, 16)
 SettingsKeybindLabel.Font = Enum.Font.RobotoMono
 SettingsKeybindLabel.Text = "> TOGGLE HOTKEY:"
@@ -636,9 +809,9 @@ SettingsKeybindLabel.TextSize = 11
 SettingsKeybindLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local SettingsKeybindBtn = Instance.new("TextButton")
-SettingsKeybindBtn.Parent = SettingsFrame
+SettingsKeybindBtn.Parent = SettingsScroll
 SettingsKeybindBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-SettingsKeybindBtn.Position = UDim2.new(0, 0, 0, 58)
+SettingsKeybindBtn.Position = UDim2.new(0, 0, 0, 118)
 SettingsKeybindBtn.Size = UDim2.new(1, 0, 0, 34)
 SettingsKeybindBtn.Font = Enum.Font.RobotoMono
 SettingsKeybindBtn.Text = "BIND: LAlt"
@@ -648,9 +821,9 @@ addOutline(SettingsKeybindBtn, Color3.fromRGB(40, 40, 45), 1)
 addCorner(SettingsKeybindBtn, 4)
 
 local ColorLabel = Instance.new("TextLabel")
-ColorLabel.Parent = SettingsFrame
+ColorLabel.Parent = SettingsScroll
 ColorLabel.BackgroundTransparency = 1
-ColorLabel.Position = UDim2.new(0, 0, 0, 104)
+ColorLabel.Position = UDim2.new(0, 0, 0, 164)
 ColorLabel.Size = UDim2.new(1, 0, 0, 16)
 ColorLabel.Font = Enum.Font.RobotoMono
 ColorLabel.Text = "> UI ACCENT COLOR:"
@@ -672,9 +845,9 @@ for i, opt in ipairs(colorOptions) do
 	local col = math.floor((i - 1) % 3)
 	local row = math.floor((i - 1) / 3)
 	local cb = Instance.new("TextButton")
-	cb.Parent = SettingsFrame
+	cb.Parent = SettingsScroll
 	cb.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
-	cb.Position = UDim2.new(0, col * 96, 0, 124 + row * 42)
+	cb.Position = UDim2.new(0, col * 96, 0, 184 + row * 42)
 	cb.Size = UDim2.new(0, 88, 0, 34)
 	cb.Font = Enum.Font.RobotoMono
 	cb.Text = opt.name
@@ -686,9 +859,9 @@ for i, opt in ipairs(colorOptions) do
 end
 
 local UnloadBtn = Instance.new("TextButton")
-UnloadBtn.Parent = SettingsFrame
+UnloadBtn.Parent = SettingsScroll
 UnloadBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-UnloadBtn.Position = UDim2.new(0, 0, 0, 215)
+UnloadBtn.Position = UDim2.new(0, 0, 0, 275)
 UnloadBtn.Size = UDim2.new(1, 0, 0, 45)
 UnloadBtn.Font = Enum.Font.RobotoMono
 UnloadBtn.Text = "// UNLOAD SCRIPT"
@@ -710,13 +883,11 @@ end
 
 local function applyAccentColor(newColor)
 	accentColor = newColor
-
 	for _, desc in ipairs(ScreenGui:GetDescendants()) do
 		if desc:IsA("UIStroke") and not isNeutralColor(desc.Color) then
 			desc.Color = newColor
 		end
 	end
-
 	Title.TextColor3 = newColor
 	FlyButton.TextColor3 = newColor
 	NoclipButton.TextColor3 = newColor
@@ -729,39 +900,33 @@ local function applyAccentColor(newColor)
 	UnloadBtn.TextColor3 = newColor
 	TooltipLabel.TextColor3 = newColor
 	ChatSpamBtn.TextColor3 = newColor
-
+	PlayEmoteBtn.TextColor3 = newColor
 	PlayerScroll.ScrollBarImageColor3 = newColor
+	MiscScroll.ScrollBarImageColor3 = newColor
+	SettingsScroll.ScrollBarImageColor3 = newColor
+	EmotesScroll.ScrollBarImageColor3 = newColor
 	TpListFrame.ScrollBarImageColor3 = newColor
-
 	SpeedSliderFill.BackgroundColor3 = newColor
 	SpeedSliderKnob.UIStroke.Color = newColor
 	JumpSliderFill.BackgroundColor3 = newColor
 	JumpSliderKnob.UIStroke.Color = newColor
 	MainFrame.UIStroke.Color = newColor
-
-	-- ESP highlights live updaten
 	for _, h in pairs(espHighlights) do
-		if h and h.Parent then
-			h.OutlineColor = newColor
-		end
+		if h and h.Parent then h.OutlineColor = newColor end
 	end
-
 	for _, tab in ipairs({
 		{btn = PlayerTabBtn,   frame = PlayerScroll},
 		{btn = MiscTabBtn,     frame = MiscFrame},
 		{btn = SettingsTabBtn, frame = SettingsFrame},
 		{btn = EspTabBtn,      frame = EspFrame},
+		{btn = EmotesTabBtn,   frame = EmotesFrame},
 	}) do
-		if tab.frame.Visible then
-			tab.btn.TextColor3 = newColor
-		end
+		if tab.frame.Visible then tab.btn.TextColor3 = newColor end
 	end
 end
 
 for _, entry in ipairs(colorBtns) do
-	entry.btn.MouseButton1Click:Connect(function()
-		applyAccentColor(entry.color)
-	end)
+	entry.btn.MouseButton1Click:Connect(function() applyAccentColor(entry.color) end)
 end
 
 --- ========================================== ---
@@ -773,6 +938,7 @@ local allTabs = {
 	{btn = MiscTabBtn,     frame = MiscFrame,     name = "MISC"},
 	{btn = SettingsTabBtn, frame = SettingsFrame, name = "SETTINGS"},
 	{btn = EspTabBtn,      frame = EspFrame,      name = "ESP"},
+	{btn = EmotesTabBtn,   frame = EmotesFrame,   name = "EMOTES"},
 }
 
 local function switchTab(activeBtn, activeFrame)
@@ -787,10 +953,11 @@ local function switchTab(activeBtn, activeFrame)
 end
 switchTab(PlayerTabBtn, PlayerScroll)
 
-PlayerTabBtn.MouseButton1Click:Connect(function() switchTab(PlayerTabBtn, PlayerScroll) end)
-MiscTabBtn.MouseButton1Click:Connect(function() switchTab(MiscTabBtn, MiscFrame) end)
+PlayerTabBtn.MouseButton1Click:Connect(function()   switchTab(PlayerTabBtn,   PlayerScroll)  end)
+MiscTabBtn.MouseButton1Click:Connect(function()     switchTab(MiscTabBtn,     MiscFrame)     end)
 SettingsTabBtn.MouseButton1Click:Connect(function() switchTab(SettingsTabBtn, SettingsFrame) end)
-EspTabBtn.MouseButton1Click:Connect(function() switchTab(EspTabBtn, EspFrame) end)
+EspTabBtn.MouseButton1Click:Connect(function()      switchTab(EspTabBtn,      EspFrame)      end)
+EmotesTabBtn.MouseButton1Click:Connect(function()   switchTab(EmotesTabBtn,   EmotesFrame)   end)
 
 local currentKey = Enum.KeyCode.LeftAlt
 local listening = false
@@ -809,8 +976,7 @@ UserInputService.InputBegan:Connect(function(input, gpe)
 	if listening and input.UserInputType == Enum.UserInputType.Keyboard then
 		currentKey = input.KeyCode
 		listening = false
-		local bindText = "BIND: " .. input.KeyCode.Name
-		SettingsKeybindBtn.Text = bindText
+		SettingsKeybindBtn.Text = "BIND: " .. input.KeyCode.Name
 		SettingsKeybindBtn.TextColor3 = accentColor
 		return
 	end
@@ -966,42 +1132,31 @@ end
 InfiniteJumpButton.MouseButton1Click:Connect(function() setInfiniteJump(not infiniteJumpEnabled) end)
 
 --- ========================================== ---
--- [[ LOGICA: ESP — VOLLEDIG GEFIXED ]] --
+-- [[ LOGICA: ESP ]] --
 --- ========================================== ---
 
 local espEnabled = false
 local espConnections = {}
 
--- FIX: verwijder ALLE highlights inclusief nieuwe character spawns
 local function removeEsp()
-	-- Stop alle character-added connections
 	for _, conn in pairs(espConnections) do
 		if conn then pcall(function() conn:Disconnect() end) end
 	end
 	espConnections = {}
-
-	-- Verwijder alle bestaande highlights
 	for _, h in pairs(espHighlights) do
-		if h and h.Parent then
-			pcall(function() h:Destroy() end)
-		end
+		if h and h.Parent then pcall(function() h:Destroy() end) end
 	end
 	espHighlights = {}
-
-	-- Extra zekerheid: loop door alle spelers en verwijder eventuele overgebleven highlights
 	for _, plr in ipairs(Players:GetPlayers()) do
 		if plr ~= LocalPlayer and plr.Character then
 			for _, obj in ipairs(plr.Character:GetChildren()) do
-				if obj:IsA("Highlight") then
-					pcall(function() obj:Destroy() end)
-				end
+				if obj:IsA("Highlight") then pcall(function() obj:Destroy() end) end
 			end
 		end
 	end
 end
 
 local function addHighlightToChar(char, plrName)
-	-- Verwijder eventuele oude highlight eerst
 	for _, obj in ipairs(char:GetChildren()) do
 		if obj:IsA("Highlight") then pcall(function() obj:Destroy() end) end
 	end
@@ -1016,10 +1171,7 @@ end
 local function addEsp()
 	for _, plr in ipairs(Players:GetPlayers()) do
 		if plr ~= LocalPlayer then
-			if plr.Character then
-				addHighlightToChar(plr.Character, plr.Name)
-			end
-			-- Bijhouden als speler respawnt
+			if plr.Character then addHighlightToChar(plr.Character, plr.Name) end
 			local conn = plr.CharacterAdded:Connect(function(char)
 				if not espEnabled then return end
 				task.wait(0.5)
@@ -1028,8 +1180,6 @@ local function addEsp()
 			table.insert(espConnections, conn)
 		end
 	end
-
-	-- Nieuwe spelers die joinen
 	local playerAddedConn = Players.PlayerAdded:Connect(function(plr)
 		if not espEnabled then return end
 		local conn = plr.CharacterAdded:Connect(function(char)
@@ -1178,6 +1328,7 @@ end)
 
 LocalPlayer.CharacterAdded:Connect(function(char)
 	stopClassicFly()
+	stopEmote()
 	if noclipEnabled then setNoclip(false) end
 	local hum = char:WaitForChild("Humanoid")
 	hum.WalkSpeed = walkSpeedValue
@@ -1194,6 +1345,7 @@ UnloadBtn.MouseButton1Click:Connect(function()
 	setInfiniteJump(false)
 	setEsp(false)
 	stopChatSpam()
+	stopEmote()
 	local char = LocalPlayer.Character
 	if char then
 		local hum = char:FindFirstChild("Humanoid")
