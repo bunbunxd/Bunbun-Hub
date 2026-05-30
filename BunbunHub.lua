@@ -599,7 +599,7 @@ local function startChatSpam()
 	chatSpamThread = task.spawn(function()
 		while chatSpamming do
 			sendChatMessage("BununXD is the goat")
-			task.wait(0.7) -- zo snel mogelijk, 0.1s is Roblox minimum
+			task.wait(1) -- zo snel mogelijk, 0.1s is Roblox minimum
 		end
 	end)
 end
