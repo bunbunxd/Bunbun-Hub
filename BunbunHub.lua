@@ -6,12 +6,15 @@ local LeftPanel = Instance.new("Frame")
 local TabContainer = Instance.new("Frame")
 local ContentContainer = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
+local BunIcon = Instance.new("ImageLabel")
 
 -- Tabs & Frames
 local PlayerTabBtn = Instance.new("TextButton")
 local MiscTabBtn = Instance.new("TextButton")
+local SettingsTabBtn = Instance.new("TextButton")
 local PlayerFrame = Instance.new("Frame")
 local MiscFrame = Instance.new("Frame")
+local SettingsFrame = Instance.new("Frame")
 
 -- Elementen in Player Tab
 local FlyButton = Instance.new("TextButton")
@@ -26,6 +29,14 @@ local StyleFrame = Instance.new("Frame")
 local StyleLabel = Instance.new("TextLabel")
 local NormalStyleBtn = Instance.new("TextButton")
 local SupermanStyleBtn = Instance.new("TextButton")
+
+-- Speed Slider
+local SpeedSliderFrame = Instance.new("Frame")
+local SpeedSliderLabel = Instance.new("TextLabel")
+local SpeedSliderTrack = Instance.new("Frame")
+local SpeedSliderFill = Instance.new("Frame")
+local SpeedSliderKnob = Instance.new("TextButton")
+local SpeedValueLabel = Instance.new("TextLabel")
 
 -- Elementen in Left Panel (Keybind onderaan)
 local KeybindBtn = Instance.new("TextButton")
@@ -80,6 +91,10 @@ addOutline(MainFrame, Color3.fromRGB(255, 40, 40), 1)
 addCorner(MainFrame, 6)
 
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 local dragging, dragInput, dragStart, startPos
 local function update(input)
 	local delta = input.Position - dragStart
@@ -111,14 +126,23 @@ LeftPanel.Size = UDim2.new(0, 130, 1, 0)
 addOutline(LeftPanel, Color3.fromRGB(35, 35, 40), 1)
 addCorner(LeftPanel, 6)
 
+-- Bugs Bunny icoon
+BunIcon.Parent = LeftPanel
+BunIcon.BackgroundTransparency = 1
+BunIcon.Position = UDim2.new(0, 6, 0, 8)
+BunIcon.Size = UDim2.new(0, 22, 0, 28)
+BunIcon.Image = "rbxassetid://14578474740"
+BunIcon.ScaleType = Enum.ScaleType.Fit
+
 Title.Parent = LeftPanel
 Title.BackgroundTransparency = 1
-Title.Position = UDim2.new(0, 0, 0, 12)
-Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Position = UDim2.new(0, 30, 0, 12)
+Title.Size = UDim2.new(1, -30, 0, 30)
 Title.Font = Enum.Font.RobotoMono
 Title.Text = "> BUNBUN"
 Title.TextColor3 = Color3.fromRGB(255, 40, 40)
 Title.TextSize = 16
+Title.TextXAlignment = Enum.TextXAlignment.Left
 
 TabContainer.Parent = LeftPanel
 TabContainer.BackgroundTransparency = 1
@@ -138,6 +162,7 @@ local function styleTabBtn(btn, text, pos)
 end
 styleTabBtn(PlayerTabBtn, "PLAYER", UDim2.new(0, 0, 0, 0))
 styleTabBtn(MiscTabBtn, "MISC", UDim2.new(0, 0, 0, 35))
+styleTabBtn(SettingsTabBtn, "SETTINGS", UDim2.new(0, 0, 0, 70))
 
 KeybindBtn.Parent = LeftPanel
 KeybindBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
@@ -166,6 +191,7 @@ local function createPage(name)
 end
 PlayerFrame = createPage("PlayerFrame")
 MiscFrame = createPage("MiscFrame")
+SettingsFrame = createPage("SettingsFrame")
 PlayerFrame.Visible = true
 
 FlyButton.Parent = PlayerFrame
@@ -220,6 +246,56 @@ StyleLabel.TextXAlignment = Enum.TextXAlignment.Left
 styleOptionBtn(NormalStyleBtn, StyleFrame, "NORMAL", UDim2.new(0.04, 0, 0, 38), UDim2.new(0.44, 0, 0, 35))
 styleOptionBtn(SupermanStyleBtn, StyleFrame, "SUPERMAN", UDim2.new(0.52, 0, 0, 38), UDim2.new(0.44, 0, 0, 35))
 
+-- [[ SPEED SLIDER UI ]] --
+local walkSpeedValue = 16
+
+SpeedSliderFrame.Parent = PlayerFrame
+SpeedSliderFrame.BackgroundColor3 = Color3.fromRGB(14, 14, 18)
+SpeedSliderFrame.Position = UDim2.new(0, 0, 0, 270)
+SpeedSliderFrame.Size = UDim2.new(1, 0, 0, 75)
+addOutline(SpeedSliderFrame, Color3.fromRGB(30, 30, 35), 1)
+addCorner(SpeedSliderFrame, 4)
+
+SpeedSliderLabel.Parent = SpeedSliderFrame
+SpeedSliderLabel.BackgroundTransparency = 1
+SpeedSliderLabel.Position = UDim2.new(0, 12, 0, 8)
+SpeedSliderLabel.Size = UDim2.new(0.7, 0, 0, 20)
+SpeedSliderLabel.Font = Enum.Font.RobotoMono
+SpeedSliderLabel.Text = "> PLAYER SPEED:"
+SpeedSliderLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+SpeedSliderLabel.TextSize = 12
+SpeedSliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+SpeedValueLabel.Parent = SpeedSliderFrame
+SpeedValueLabel.BackgroundTransparency = 1
+SpeedValueLabel.Position = UDim2.new(0.75, 0, 0, 8)
+SpeedValueLabel.Size = UDim2.new(0.22, 0, 0, 20)
+SpeedValueLabel.Font = Enum.Font.RobotoMono
+SpeedValueLabel.Text = "16"
+SpeedValueLabel.TextColor3 = Color3.fromRGB(255, 40, 40)
+SpeedValueLabel.TextSize = 12
+SpeedValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+
+SpeedSliderTrack.Parent = SpeedSliderFrame
+SpeedSliderTrack.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+SpeedSliderTrack.Position = UDim2.new(0, 12, 0, 42)
+SpeedSliderTrack.Size = UDim2.new(1, -24, 0, 6)
+addCorner(SpeedSliderTrack, 3)
+
+SpeedSliderFill.Parent = SpeedSliderTrack
+SpeedSliderFill.BackgroundColor3 = Color3.fromRGB(255, 40, 40)
+SpeedSliderFill.Size = UDim2.new(0.1, 0, 1, 0)
+addCorner(SpeedSliderFill, 3)
+
+SpeedSliderKnob.Parent = SpeedSliderTrack
+SpeedSliderKnob.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+SpeedSliderKnob.Position = UDim2.new(0.1, -6, 0.5, -6)
+SpeedSliderKnob.Size = UDim2.new(0, 12, 0, 12)
+SpeedSliderKnob.Text = ""
+addCorner(SpeedSliderKnob, 6)
+addOutline(SpeedSliderKnob, Color3.fromRGB(255, 40, 40), 1)
+
+-- [[ MISC FRAME ]] --
 local MiscLabel = Instance.new("TextLabel")
 MiscLabel.Parent = MiscFrame
 MiscLabel.BackgroundTransparency = 1
@@ -231,25 +307,55 @@ MiscLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
 MiscLabel.TextSize = 13
 MiscLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+-- [[ SETTINGS FRAME ]] --
+local SettingsLabel = Instance.new("TextLabel")
+SettingsLabel.Parent = SettingsFrame
+SettingsLabel.BackgroundTransparency = 1
+SettingsLabel.Position = UDim2.new(0, 0, 0, 10)
+SettingsLabel.Size = UDim2.new(1, 0, 0, 30)
+SettingsLabel.Font = Enum.Font.RobotoMono
+SettingsLabel.Text = "// SETTINGS"
+SettingsLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
+SettingsLabel.TextSize = 13
+SettingsLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local UnloadBtn = Instance.new("TextButton")
+UnloadBtn.Parent = SettingsFrame
+UnloadBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+UnloadBtn.Position = UDim2.new(0, 0, 0, 55)
+UnloadBtn.Size = UDim2.new(1, 0, 0, 45)
+UnloadBtn.Font = Enum.Font.RobotoMono
+UnloadBtn.Text = "// UNLOAD SCRIPT"
+UnloadBtn.TextColor3 = Color3.fromRGB(255, 40, 40)
+UnloadBtn.TextSize = 14
+addOutline(UnloadBtn, Color3.fromRGB(40, 40, 45), 1)
+addCorner(UnloadBtn, 4)
+
 --- ========================================== ---
 -- [[ LOGICA: TABS & KEYBIND ]] --
 --- ========================================== ---
 
+local allTabs = {
+	{btn = PlayerTabBtn, frame = PlayerFrame, name = "PLAYER"},
+	{btn = MiscTabBtn, frame = MiscFrame, name = "MISC"},
+	{btn = SettingsTabBtn, frame = SettingsFrame, name = "SETTINGS"},
+}
+
 local function switchTab(activeBtn, activeFrame)
-	PlayerFrame.Visible = false
-	MiscFrame.Visible = false
-	PlayerTabBtn.TextColor3 = Color3.fromRGB(140, 140, 140)
-	PlayerTabBtn.Text = "[ ] " .. string.sub(PlayerTabBtn.Text, 5)
-	MiscTabBtn.TextColor3 = Color3.fromRGB(140, 140, 140)
-	MiscTabBtn.Text = "[ ] " .. string.sub(MiscTabBtn.Text, 5)
+	for _, tab in ipairs(allTabs) do
+		tab.frame.Visible = false
+		tab.btn.TextColor3 = Color3.fromRGB(140, 140, 140)
+		tab.btn.Text = "[ ] " .. tab.name
+	end
 	activeFrame.Visible = true
 	activeBtn.TextColor3 = Color3.fromRGB(255, 40, 40)
-	activeBtn.Text = "[X] " .. string.sub(activeBtn.Text, 5)
+	activeBtn.Text = "[X] " .. string.match(activeBtn.Text, "%] (.+)$")
 end
 switchTab(PlayerTabBtn, PlayerFrame)
 
 PlayerTabBtn.MouseButton1Click:Connect(function() switchTab(PlayerTabBtn, PlayerFrame) end)
 MiscTabBtn.MouseButton1Click:Connect(function() switchTab(MiscTabBtn, MiscFrame) end)
+SettingsTabBtn.MouseButton1Click:Connect(function() switchTab(SettingsTabBtn, SettingsFrame) end)
 
 local currentKey = Enum.KeyCode.LeftAlt
 local listening = false
@@ -275,12 +381,60 @@ UserInputService.InputBegan:Connect(function(input, gpe)
 end)
 
 --- ========================================== ---
--- [[ LOGICA: CLASSIC FLY ENGINE ]] --
+-- [[ LOGICA: SPEED SLIDER ]] --
 --- ========================================== ---
 
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+local minSpeed = 8
+local maxSpeed = 150
+local draggingSlider = false
+
+local function updateSlider(xRatio)
+	xRatio = math.clamp(xRatio, 0, 1)
+	walkSpeedValue = math.floor(minSpeed + (maxSpeed - minSpeed) * xRatio)
+	SpeedSliderFill.Size = UDim2.new(xRatio, 0, 1, 0)
+	SpeedSliderKnob.Position = UDim2.new(xRatio, -6, 0.5, -6)
+	SpeedValueLabel.Text = tostring(walkSpeedValue)
+
+	local char = LocalPlayer.Character
+	if char then
+		local hum = char:FindFirstChild("Humanoid")
+		if hum then hum.WalkSpeed = walkSpeedValue end
+	end
+end
+
+SpeedSliderKnob.MouseButton1Down:Connect(function()
+	draggingSlider = true
+end)
+
+SpeedSliderTrack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		draggingSlider = true
+		local trackPos = SpeedSliderTrack.AbsolutePosition.X
+		local trackSize = SpeedSliderTrack.AbsoluteSize.X
+		local ratio = (input.Position.X - trackPos) / trackSize
+		updateSlider(ratio)
+	end
+end)
+
+RunService.RenderStepped:Connect(function()
+	if draggingSlider then
+		local mousePos = UserInputService:GetMouseLocation()
+		local trackPos = SpeedSliderTrack.AbsolutePosition.X
+		local trackSize = SpeedSliderTrack.AbsoluteSize.X
+		local ratio = (mousePos.X - trackPos) / trackSize
+		updateSlider(ratio)
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		draggingSlider = false
+	end
+end)
+
+--- ========================================== ---
+-- [[ LOGICA: CLASSIC FLY ENGINE ]] --
+--- ========================================== ---
 
 local flying = false
 local flySpeed = 1.8
@@ -333,10 +487,10 @@ local function startClassicFly()
 	local root = char:WaitForChild("HumanoidRootPart", 5)
 	local hum = char:WaitForChild("Humanoid", 5)
 	if not root or not hum then return end
-	
+
 	local cam = workspace.CurrentCamera
 	hum.PlatformStand = true
-	
+
 	originalGravity = workspace.Gravity
 	workspace.Gravity = 0
 
@@ -346,7 +500,7 @@ local function startClassicFly()
 
 	connectionFly = RunService.RenderStepped:Connect(function()
 		if not root or not hum then return end
-		
+
 		root.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
 		root.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
 
@@ -355,15 +509,15 @@ local function startClassicFly()
 		if UserInputService:IsKeyDown(Enum.KeyCode.S) then inputVector = inputVector - cam.CFrame.LookVector end
 		if UserInputService:IsKeyDown(Enum.KeyCode.A) then inputVector = inputVector - cam.CFrame.RightVector end
 		if UserInputService:IsKeyDown(Enum.KeyCode.D) then inputVector = inputVector + cam.CFrame.RightVector end
-		
+
 		if inputVector.Magnitude > 0 then
 			targetMoveVector = inputVector.Unit * flySpeed
 		else
 			targetMoveVector = Vector3.new(0, 0, 0)
 		end
-		
+
 		currentMoveVector = currentMoveVector:Lerp(targetMoveVector, 0.2)
-		
+
 		if flyStyle == "Superman" then
 			local targetCFrame
 			if currentMoveVector.Magnitude > 0.05 then
@@ -385,12 +539,12 @@ local function stopClassicFly()
 	FlyButton.Text = "// TOGGLE FLY: OFF"
 	FlyButton.TextColor3 = Color3.fromRGB(255, 40, 40)
 	FlyButton.UIStroke.Color = Color3.fromRGB(40, 40, 45)
-	
+
 	workspace.Gravity = originalGravity
-	
+
 	if connectionFly then connectionFly:Disconnect() connectionFly = nil end
 	if flyAnimTrack then pcall(function() flyAnimTrack:Stop() flyAnimTrack:Destroy() end) flyAnimTrack = nil end
-	
+
 	local char = LocalPlayer.Character
 	if char then
 		local hum = char:FindFirstChild("Humanoid")
@@ -410,4 +564,26 @@ FlyButton.MouseButton1Click:Connect(function()
 	end
 end)
 
-LocalPlayer.CharacterAdded:Connect(stopClassicFly)
+LocalPlayer.CharacterAdded:Connect(function(char)
+	stopClassicFly()
+	local hum = char:WaitForChild("Humanoid")
+	hum.WalkSpeed = walkSpeedValue
+end)
+
+--- ========================================== ---
+-- [[ LOGICA: UNLOAD ]] --
+--- ========================================== ---
+
+UnloadBtn.MouseButton1Click:Connect(function()
+	stopClassicFly()
+	local char = LocalPlayer.Character
+	if char then
+		local hum = char:FindFirstChild("Humanoid")
+		if hum then
+			hum.WalkSpeed = 16
+			hum.PlatformStand = false
+		end
+	end
+	workspace.Gravity = originalGravity
+	ScreenGui:Destroy()
+end)
