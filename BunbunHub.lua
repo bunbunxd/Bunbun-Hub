@@ -8,10 +8,12 @@ local ContentContainer = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
 local BunIcon = Instance.new("ImageLabel")
 
+local HomeTabBtn = Instance.new("TextButton")
 local PlayerTabBtn = Instance.new("TextButton")
 local MiscTabBtn = Instance.new("TextButton")
 local SettingsTabBtn = Instance.new("TextButton")
 local EspTabBtn = Instance.new("TextButton")
+local HomeFrame = Instance.new("Frame")
 local PlayerScroll = Instance.new("ScrollingFrame")
 local MiscFrame = Instance.new("Frame")
 local SettingsFrame = Instance.new("Frame")
@@ -63,12 +65,10 @@ local LocalPlayer = Players.LocalPlayer
 local function getStroke(obj)
 	return obj:FindFirstChildOfClass("UIStroke")
 end
-
 local function setStrokeColor(obj, color)
 	local s = getStroke(obj)
 	if s then s.Color = color end
 end
-
 local function addOutline(parent, color, thickness)
 	local stroke = Instance.new("UIStroke")
 	stroke.Color = color or accentColor
@@ -77,13 +77,11 @@ local function addOutline(parent, color, thickness)
 	stroke.Parent = parent
 	return stroke
 end
-
 local function addCorner(parent, radius)
 	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, radius or 4)
+	corner.CornerRadius = UDim.new(0, radius or 6)
 	corner.Parent = parent
 end
-
 local function styleOptionBtn(btn, parent, text, pos, size)
 	btn.Parent = parent
 	btn.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
@@ -94,17 +92,18 @@ local function styleOptionBtn(btn, parent, text, pos, size)
 	btn.TextColor3 = Color3.fromRGB(200, 200, 200)
 	btn.TextSize = 12
 	addOutline(btn, Color3.fromRGB(45, 45, 50), 1)
-	addCorner(btn, 4)
+	addCorner(btn, 6)
 end
 
+-- MAIN FRAME: breder (560px) en iets hoger (410px)
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = bgDark
-MainFrame.Position = UDim2.new(0.5, -225, 0.25, -175)
-MainFrame.Size = UDim2.new(0, 450, 0, 390)
+MainFrame.Position = UDim2.new(0.5, -280, 0.25, -205)
+MainFrame.Size = UDim2.new(0, 560, 0, 410)
 MainFrame.Active = true
 addOutline(MainFrame, accentColor, 1)
-addCorner(MainFrame, 6)
+addCorner(MainFrame, 8)
 
 TooltipLabel.Parent = ScreenGui
 TooltipLabel.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
@@ -148,34 +147,35 @@ UserInputService.InputChanged:Connect(function(input)
 	if input == dragInput and dragging then update(input) end
 end)
 
+-- LEFT PANEL: 145px breed
 LeftPanel.Name = "LeftPanel"
 LeftPanel.Parent = MainFrame
 LeftPanel.BackgroundColor3 = bgPanel
-LeftPanel.Size = UDim2.new(0, 130, 1, 0)
+LeftPanel.Size = UDim2.new(0, 145, 1, 0)
 addOutline(LeftPanel, Color3.fromRGB(35, 35, 40), 1)
-addCorner(LeftPanel, 6)
+addCorner(LeftPanel, 8)
 
 BunIcon.Parent = LeftPanel
 BunIcon.BackgroundTransparency = 1
-BunIcon.Position = UDim2.new(0, 6, 0, 8)
+BunIcon.Position = UDim2.new(0, 8, 0, 10)
 BunIcon.Size = UDim2.new(0, 22, 0, 28)
 BunIcon.Image = "rbxassetid://14578474740"
 BunIcon.ScaleType = Enum.ScaleType.Fit
 
 Title.Parent = LeftPanel
 Title.BackgroundTransparency = 1
-Title.Position = UDim2.new(0, 30, 0, 12)
-Title.Size = UDim2.new(1, -30, 0, 30)
+Title.Position = UDim2.new(0, 34, 0, 13)
+Title.Size = UDim2.new(1, -38, 0, 28)
 Title.Font = Enum.Font.RobotoMono
 Title.Text = "> BUNBUN"
 Title.TextColor3 = accentColor
-Title.TextSize = 16
+Title.TextSize = 15
 Title.TextXAlignment = Enum.TextXAlignment.Left
 
 TabContainer.Parent = LeftPanel
 TabContainer.BackgroundTransparency = 1
-TabContainer.Position = UDim2.new(0, 10, 0, 60)
-TabContainer.Size = UDim2.new(1, -20, 0, 210)
+TabContainer.Position = UDim2.new(0, 10, 0, 58)
+TabContainer.Size = UDim2.new(1, -20, 0, 250)
 
 local function styleTabBtn(btn, text, pos)
 	btn.Parent = TabContainer
@@ -188,16 +188,39 @@ local function styleTabBtn(btn, text, pos)
 	btn.TextSize = 13
 	btn.TextXAlignment = Enum.TextXAlignment.Left
 end
-styleTabBtn(PlayerTabBtn,   "PLAYER",   UDim2.new(0, 0, 0, 0))
-styleTabBtn(MiscTabBtn,     "MISC",     UDim2.new(0, 0, 0, 35))
-styleTabBtn(SettingsTabBtn, "SETTINGS", UDim2.new(0, 0, 0, 70))
-styleTabBtn(EspTabBtn,      "ESP",      UDim2.new(0, 0, 0, 105))
+styleTabBtn(HomeTabBtn,     "HOME",     UDim2.new(0, 0, 0, 0))
+styleTabBtn(PlayerTabBtn,   "PLAYER",   UDim2.new(0, 0, 0, 35))
+styleTabBtn(MiscTabBtn,     "MISC",     UDim2.new(0, 0, 0, 70))
+styleTabBtn(SettingsTabBtn, "SETTINGS", UDim2.new(0, 0, 0, 105))
+styleTabBtn(EspTabBtn,      "ESP",      UDim2.new(0, 0, 0, 140))
 
+-- CONTENT CONTAINER: begint na left panel met 12px gap, 14px padding aan alle kanten
 ContentContainer.Parent = MainFrame
 ContentContainer.BackgroundTransparency = 1
-ContentContainer.Position = UDim2.new(0, 140, 0, 15)
-ContentContainer.Size = UDim2.new(1, -155, 1, -30)
+ContentContainer.Position = UDim2.new(0, 157, 0, 14)
+ContentContainer.Size = UDim2.new(1, -171, 1, -28)
 
+-- ===================== HOME FRAME =====================
+HomeFrame.Name = "HomeFrame"
+HomeFrame.Parent = ContentContainer
+HomeFrame.BackgroundTransparency = 1
+HomeFrame.Size = UDim2.new(1, 0, 1, 0)
+HomeFrame.Visible = true
+
+local AsciiLabel = Instance.new("TextLabel")
+AsciiLabel.Parent = HomeFrame
+AsciiLabel.BackgroundTransparency = 1
+AsciiLabel.Position = UDim2.new(0, 0, 0, 10)
+AsciiLabel.Size = UDim2.new(1, 0, 0, 120)
+AsciiLabel.Font = Enum.Font.RobotoMono
+AsciiLabel.Text = " _                 _\n| |__  _   _ _ __ | |__  _   _ _ __\n| '_ \\| | | | '_ \\| '_ \\| | | | '_ \\\n| |_) | |_| | | | | |_) | |_| | | | |\n|_.__/ \\__,_|_| |_|_.__/ \\__,_|_| |_|"
+AsciiLabel.TextColor3 = accentColor
+AsciiLabel.TextSize = 11
+AsciiLabel.TextXAlignment = Enum.TextXAlignment.Left
+AsciiLabel.TextYAlignment = Enum.TextYAlignment.Top
+AsciiLabel.RichText = false
+
+-- ===================== PLAYER SCROLL =====================
 PlayerScroll.Name = "PlayerScroll"
 PlayerScroll.Parent = ContentContainer
 PlayerScroll.BackgroundTransparency = 1
@@ -205,7 +228,7 @@ PlayerScroll.Size = UDim2.new(1, 0, 1, 0)
 PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, 530)
 PlayerScroll.ScrollBarThickness = 3
 PlayerScroll.ScrollBarImageColor3 = accentColor
-PlayerScroll.Visible = true
+PlayerScroll.Visible = false
 
 local function createPage(name)
 	local f = Instance.new("Frame")
@@ -220,6 +243,7 @@ MiscFrame     = createPage("MiscFrame")
 SettingsFrame = createPage("SettingsFrame")
 EspFrame      = createPage("EspFrame")
 
+-- FLY BUTTON
 FlyButton.Parent = PlayerScroll
 FlyButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 FlyButton.Position = UDim2.new(0, 0, 0, 10)
@@ -229,14 +253,15 @@ FlyButton.Text = "// TOGGLE FLY: OFF"
 FlyButton.TextColor3 = accentColor
 FlyButton.TextSize = 14
 addOutline(FlyButton, Color3.fromRGB(40, 40, 45), 1)
-addCorner(FlyButton, 4)
+addCorner(FlyButton, 6)
 
+-- SPEED SELECTOR
 SpeedFrame.Parent = PlayerScroll
 SpeedFrame.BackgroundColor3 = bgMid
 SpeedFrame.Position = UDim2.new(0, 0, 0, 70)
 SpeedFrame.Size = UDim2.new(1, 0, 0, 85)
 addOutline(SpeedFrame, Color3.fromRGB(30, 30, 35), 1)
-addCorner(SpeedFrame, 4)
+addCorner(SpeedFrame, 6)
 
 SpeedLabel.Parent = SpeedFrame
 SpeedLabel.BackgroundTransparency = 1
@@ -252,12 +277,13 @@ styleOptionBtn(Mode1Btn, SpeedFrame, "INIT_1", UDim2.new(0.04, 0, 0, 38))
 styleOptionBtn(Mode2Btn, SpeedFrame, "HALF_2", UDim2.new(0.36, 0, 0, 38))
 styleOptionBtn(Mode3Btn, SpeedFrame, "FULL_3", UDim2.new(0.68, 0, 0, 38))
 
+-- STYLE SELECTOR
 StyleFrame.Parent = PlayerScroll
 StyleFrame.BackgroundColor3 = bgMid
 StyleFrame.Position = UDim2.new(0, 0, 0, 170)
 StyleFrame.Size = UDim2.new(1, 0, 0, 85)
 addOutline(StyleFrame, Color3.fromRGB(30, 30, 35), 1)
-addCorner(StyleFrame, 4)
+addCorner(StyleFrame, 6)
 
 StyleLabel.Parent = StyleFrame
 StyleLabel.BackgroundTransparency = 1
@@ -280,7 +306,7 @@ SupermanStyleBtn.Text = "SUPERMAN ?"
 SupermanStyleBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
 SupermanStyleBtn.TextSize = 12
 addOutline(SupermanStyleBtn, Color3.fromRGB(45, 45, 50), 1)
-addCorner(SupermanStyleBtn, 4)
+addCorner(SupermanStyleBtn, 6)
 
 SupermanStyleBtn.MouseEnter:Connect(function()
 	local absPos = MainFrame.AbsolutePosition
@@ -295,12 +321,13 @@ end)
 
 local walkSpeedValue = 16
 
+-- WALK SPEED SLIDER
 SpeedSliderFrame.Parent = PlayerScroll
 SpeedSliderFrame.BackgroundColor3 = bgMid
 SpeedSliderFrame.Position = UDim2.new(0, 0, 0, 270)
 SpeedSliderFrame.Size = UDim2.new(1, 0, 0, 75)
 addOutline(SpeedSliderFrame, Color3.fromRGB(30, 30, 35), 1)
-addCorner(SpeedSliderFrame, 4)
+addCorner(SpeedSliderFrame, 6)
 
 SpeedSliderLabel.Parent = SpeedSliderFrame
 SpeedSliderLabel.BackgroundTransparency = 1
@@ -324,7 +351,7 @@ SpeedValueLabel.TextXAlignment = Enum.TextXAlignment.Right
 
 SpeedSliderTrack.Parent = SpeedSliderFrame
 SpeedSliderTrack.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-SpeedSliderTrack.Position = UDim2.new(0, 12, 0, 42)
+SpeedSliderTrack.Position = UDim2.new(0, 12, 0, 44)
 SpeedSliderTrack.Size = UDim2.new(1, -24, 0, 6)
 addCorner(SpeedSliderTrack, 3)
 
@@ -343,12 +370,13 @@ addOutline(SpeedSliderKnob, accentColor, 1)
 
 local jumpHeightValue = 50
 
+-- JUMP SLIDER
 JumpSliderFrame.Parent = PlayerScroll
 JumpSliderFrame.BackgroundColor3 = bgMid
 JumpSliderFrame.Position = UDim2.new(0, 0, 0, 360)
 JumpSliderFrame.Size = UDim2.new(1, 0, 0, 75)
 addOutline(JumpSliderFrame, Color3.fromRGB(30, 30, 35), 1)
-addCorner(JumpSliderFrame, 4)
+addCorner(JumpSliderFrame, 6)
 
 JumpSliderLabel.Parent = JumpSliderFrame
 JumpSliderLabel.BackgroundTransparency = 1
@@ -372,7 +400,7 @@ JumpValueLabel.TextXAlignment = Enum.TextXAlignment.Right
 
 JumpSliderTrack.Parent = JumpSliderFrame
 JumpSliderTrack.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-JumpSliderTrack.Position = UDim2.new(0, 12, 0, 42)
+JumpSliderTrack.Position = UDim2.new(0, 12, 0, 44)
 JumpSliderTrack.Size = UDim2.new(1, -24, 0, 6)
 addCorner(JumpSliderTrack, 3)
 
@@ -389,6 +417,7 @@ JumpSliderKnob.Text = ""
 addCorner(JumpSliderKnob, 6)
 addOutline(JumpSliderKnob, accentColor, 1)
 
+-- INFINITE JUMP
 InfiniteJumpButton.Parent = PlayerScroll
 InfiniteJumpButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 InfiniteJumpButton.Position = UDim2.new(0, 0, 0, 450)
@@ -398,7 +427,7 @@ InfiniteJumpButton.Text = "// INFINITE JUMP: OFF"
 InfiniteJumpButton.TextColor3 = accentColor
 InfiniteJumpButton.TextSize = 14
 addOutline(InfiniteJumpButton, Color3.fromRGB(40, 40, 45), 1)
-addCorner(InfiniteJumpButton, 4)
+addCorner(InfiniteJumpButton, 6)
 
 --- ========================================== ---
 -- [[ MISC FRAME ]] --
@@ -408,7 +437,7 @@ local MiscScroll = Instance.new("ScrollingFrame")
 MiscScroll.Parent = MiscFrame
 MiscScroll.BackgroundTransparency = 1
 MiscScroll.Size = UDim2.new(1, 0, 1, 0)
-MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 200)
+MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 260)
 MiscScroll.ScrollBarThickness = 3
 MiscScroll.ScrollBarImageColor3 = accentColor
 
@@ -433,7 +462,7 @@ TpBtn.Text = "// TP TO PLAYER"
 TpBtn.TextColor3 = accentColor
 TpBtn.TextSize = 13
 addOutline(TpBtn, Color3.fromRGB(40, 40, 45), 1)
-addCorner(TpBtn, 4)
+addCorner(TpBtn, 6)
 
 local TpListFrame = Instance.new("ScrollingFrame")
 TpListFrame.Parent = MiscScroll
@@ -445,7 +474,7 @@ TpListFrame.ScrollBarImageColor3 = accentColor
 TpListFrame.Visible = false
 TpListFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
 addOutline(TpListFrame, Color3.fromRGB(30, 30, 35), 1)
-addCorner(TpListFrame, 4)
+addCorner(TpListFrame, 6)
 
 local TpListLayout = Instance.new("UIListLayout")
 TpListLayout.Parent = TpListFrame
@@ -458,15 +487,29 @@ TpListPadding.PaddingTop = UDim.new(0, 6)
 TpListPadding.PaddingLeft = UDim.new(0, 6)
 TpListPadding.PaddingRight = UDim.new(0, 6)
 
+local SendChatBtn = Instance.new("TextButton")
+SendChatBtn.Parent = MiscScroll
+SendChatBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+SendChatBtn.Position = UDim2.new(0, 0, 0, 94)
+SendChatBtn.Size = UDim2.new(1, 0, 0, 38)
+SendChatBtn.Font = Enum.Font.RobotoMono
+SendChatBtn.Text = "// SEND CHAT"
+SendChatBtn.TextColor3 = accentColor
+SendChatBtn.TextSize = 13
+addOutline(SendChatBtn, Color3.fromRGB(40, 40, 45), 1)
+addCorner(SendChatBtn, 6)
+
 local function updateMiscLayout(listOpen, listHeight)
 	if listOpen then
 		TpListFrame.Size = UDim2.new(1, 0, 0, listHeight)
 		TpListFrame.Visible = true
-		MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 84 + listHeight + 10)
+		SendChatBtn.Position = UDim2.new(0, 0, 0, 84 + listHeight + 8)
+		MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 84 + listHeight + 8 + 38 + 10)
 	else
 		TpListFrame.Visible = false
 		TpListFrame.Size = UDim2.new(1, 0, 0, 0)
-		MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 200)
+		SendChatBtn.Position = UDim2.new(0, 0, 0, 94)
+		MiscScroll.CanvasSize = UDim2.new(0, 0, 0, 260)
 	end
 end
 
@@ -487,7 +530,7 @@ local function buildTpList()
 			btn.TextXAlignment = Enum.TextXAlignment.Left
 			btn.Parent = TpListFrame
 			addOutline(btn, Color3.fromRGB(45, 45, 50), 1)
-			addCorner(btn, 4)
+			addCorner(btn, 6)
 			count = count + 1
 			btn.MouseButton1Click:Connect(function()
 				local tc = plr.Character
@@ -521,6 +564,19 @@ TpBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
+SendChatBtn.MouseButton1Click:Connect(function()
+	local success = pcall(function()
+		game:GetService("Players").LocalPlayer:Chat("skibidi")
+	end)
+	if not success then
+		pcall(function()
+			local TextChatService = game:GetService("TextChatService")
+			local channel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
+			if channel then channel:SendAsync("skibidi") end
+		end)
+	end
+end)
+
 updateMiscLayout(false, 0)
 
 --- ========================================== ---
@@ -548,7 +604,7 @@ EspButton.Text = "// ESP: OFF"
 EspButton.TextColor3 = accentColor
 EspButton.TextSize = 14
 addOutline(EspButton, Color3.fromRGB(40, 40, 45), 1)
-addCorner(EspButton, 4)
+addCorner(EspButton, 6)
 
 --- ========================================== ---
 -- [[ SETTINGS FRAME ]] --
@@ -584,7 +640,7 @@ NoclipButton.Text = "// TOGGLE NOCLIP: OFF"
 NoclipButton.TextColor3 = accentColor
 NoclipButton.TextSize = 14
 addOutline(NoclipButton, Color3.fromRGB(40, 40, 45), 1)
-addCorner(NoclipButton, 4)
+addCorner(NoclipButton, 6)
 
 local SettingsKeybindLabel = Instance.new("TextLabel")
 SettingsKeybindLabel.Parent = SettingsScroll
@@ -607,7 +663,7 @@ SettingsKeybindBtn.Text = "BIND: LAlt"
 SettingsKeybindBtn.TextColor3 = accentColor
 SettingsKeybindBtn.TextSize = 12
 addOutline(SettingsKeybindBtn, Color3.fromRGB(40, 40, 45), 1)
-addCorner(SettingsKeybindBtn, 4)
+addCorner(SettingsKeybindBtn, 6)
 
 local ColorLabel = Instance.new("TextLabel")
 ColorLabel.Parent = SettingsScroll
@@ -636,14 +692,14 @@ for i, opt in ipairs(colorOptions) do
 	local cb = Instance.new("TextButton")
 	cb.Parent = SettingsScroll
 	cb.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
-	cb.Position = UDim2.new(0, col * 96, 0, 184 + row * 42)
-	cb.Size = UDim2.new(0, 88, 0, 34)
+	cb.Position = UDim2.new(0, col * 120, 0, 184 + row * 42)
+	cb.Size = UDim2.new(0, 112, 0, 34)
 	cb.Font = Enum.Font.RobotoMono
 	cb.Text = opt.name
 	cb.TextColor3 = opt.color
 	cb.TextSize = 11
 	addOutline(cb, opt.color, 1)
-	addCorner(cb, 4)
+	addCorner(cb, 6)
 	colorBtns[i] = {btn = cb, color = opt.color}
 end
 
@@ -657,7 +713,7 @@ UnloadBtn.Text = "// UNLOAD SCRIPT"
 UnloadBtn.TextColor3 = accentColor
 UnloadBtn.TextSize = 14
 addOutline(UnloadBtn, Color3.fromRGB(40, 40, 45), 1)
-addCorner(UnloadBtn, 4)
+addCorner(UnloadBtn, 6)
 
 --- ========================================== ---
 -- [[ KLEUR AANPASSEN ]] --
@@ -678,6 +734,7 @@ local function applyAccentColor(newColor)
 		end
 	end
 	Title.TextColor3 = newColor
+	AsciiLabel.TextColor3 = newColor
 	FlyButton.TextColor3 = newColor
 	NoclipButton.TextColor3 = newColor
 	InfiniteJumpButton.TextColor3 = newColor
@@ -685,6 +742,7 @@ local function applyAccentColor(newColor)
 	JumpValueLabel.TextColor3 = newColor
 	SettingsKeybindBtn.TextColor3 = newColor
 	TpBtn.TextColor3 = newColor
+	SendChatBtn.TextColor3 = newColor
 	EspButton.TextColor3 = newColor
 	UnloadBtn.TextColor3 = newColor
 	TooltipLabel.TextColor3 = newColor
@@ -701,10 +759,11 @@ local function applyAccentColor(newColor)
 		if h and h.Parent then h.OutlineColor = newColor end
 	end
 	for _, tab in ipairs({
-		{btn = PlayerTabBtn,   frame = PlayerScroll},
-		{btn = MiscTabBtn,     frame = MiscFrame},
-		{btn = SettingsTabBtn, frame = SettingsFrame},
-		{btn = EspTabBtn,      frame = EspFrame},
+		{btn = HomeTabBtn,    frame = HomeFrame},
+		{btn = PlayerTabBtn,  frame = PlayerScroll},
+		{btn = MiscTabBtn,    frame = MiscFrame},
+		{btn = SettingsTabBtn,frame = SettingsFrame},
+		{btn = EspTabBtn,     frame = EspFrame},
 	}) do
 		if tab.frame.Visible then tab.btn.TextColor3 = newColor end
 	end
@@ -719,10 +778,11 @@ end
 --- ========================================== ---
 
 local allTabs = {
-	{btn = PlayerTabBtn,   frame = PlayerScroll,  name = "PLAYER"},
-	{btn = MiscTabBtn,     frame = MiscFrame,     name = "MISC"},
-	{btn = SettingsTabBtn, frame = SettingsFrame, name = "SETTINGS"},
-	{btn = EspTabBtn,      frame = EspFrame,      name = "ESP"},
+	{btn = HomeTabBtn,    frame = HomeFrame,    name = "HOME"},
+	{btn = PlayerTabBtn,  frame = PlayerScroll, name = "PLAYER"},
+	{btn = MiscTabBtn,    frame = MiscFrame,    name = "MISC"},
+	{btn = SettingsTabBtn,frame = SettingsFrame,name = "SETTINGS"},
+	{btn = EspTabBtn,     frame = EspFrame,     name = "ESP"},
 }
 
 local function switchTab(activeBtn, activeFrame)
@@ -735,12 +795,14 @@ local function switchTab(activeBtn, activeFrame)
 	activeBtn.TextColor3 = accentColor
 	activeBtn.Text = "[X] " .. string.match(activeBtn.Text, "%] (.+)$")
 end
-switchTab(PlayerTabBtn, PlayerScroll)
 
-PlayerTabBtn.MouseButton1Click:Connect(function()   switchTab(PlayerTabBtn,   PlayerScroll)  end)
-MiscTabBtn.MouseButton1Click:Connect(function()     switchTab(MiscTabBtn,     MiscFrame)     end)
+switchTab(HomeTabBtn, HomeFrame)
+
+HomeTabBtn.MouseButton1Click:Connect(function()    switchTab(HomeTabBtn,    HomeFrame)    end)
+PlayerTabBtn.MouseButton1Click:Connect(function()  switchTab(PlayerTabBtn,  PlayerScroll) end)
+MiscTabBtn.MouseButton1Click:Connect(function()    switchTab(MiscTabBtn,    MiscFrame)    end)
 SettingsTabBtn.MouseButton1Click:Connect(function() switchTab(SettingsTabBtn, SettingsFrame) end)
-EspTabBtn.MouseButton1Click:Connect(function()      switchTab(EspTabBtn,      EspFrame)      end)
+EspTabBtn.MouseButton1Click:Connect(function()     switchTab(EspTabBtn,     EspFrame)     end)
 
 local currentKey = Enum.KeyCode.LeftAlt
 local listening = false
