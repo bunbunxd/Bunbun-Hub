@@ -177,7 +177,7 @@ Title.TextXAlignment = Enum.TextXAlignment.Left
 TabContainer.Parent = LeftPanel
 TabContainer.BackgroundTransparency = 1
 TabContainer.Position = UDim2.new(0, 10, 0, 58)
-TabContainer.Size = UDim2.new(1, -20, 0, 250)
+TabContainer.Size = UDim2.new(1, -20, 0, 290)
 
 local function styleTabBtn(btn, text, pos)
 	btn.Parent = TabContainer
@@ -193,9 +193,9 @@ end
 styleTabBtn(HomeTabBtn,     "HOME",     UDim2.new(0, 0, 0, 0))
 styleTabBtn(PlayerTabBtn,   "PLAYER",   UDim2.new(0, 0, 0, 35))
 styleTabBtn(MiscTabBtn,     "MISC",     UDim2.new(0, 0, 0, 70))
-styleTabBtn(SettingsTabBtn, "SETTINGS", UDim2.new(0, 0, 0, 105))
-styleTabBtn(EspTabBtn,      "ESP",      UDim2.new(0, 0, 0, 140))
-styleTabBtn(AimTabBtn,      "AIM",      UDim2.new(0, 0, 0, 175))
+styleTabBtn(EspTabBtn,      "ESP",      UDim2.new(0, 0, 0, 105))
+styleTabBtn(AimTabBtn,      "AIM",      UDim2.new(0, 0, 0, 140))
+styleTabBtn(SettingsTabBtn, "SETTINGS", UDim2.new(0, 0, 0, 175))
 
 -- CONTENT CONTAINER
 ContentContainer.Parent = MainFrame
@@ -620,76 +620,10 @@ AimLabel.BackgroundTransparency = 1
 AimLabel.Position = UDim2.new(0, 0, 0, 10)
 AimLabel.Size = UDim2.new(1, 0, 0, 20)
 AimLabel.Font = Enum.Font.RobotoMono
-AimLabel.Text = "// AIM UTILITIES"
+AimLabel.Text = "// AIM"
 AimLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
 AimLabel.TextSize = 13
 AimLabel.TextXAlignment = Enum.TextXAlignment.Left
-
--- FOV CIRCLE TOGGLE BUTTON
-local FovCircleButton = Instance.new("TextButton")
-FovCircleButton.Parent = AimFrame
-FovCircleButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-FovCircleButton.Position = UDim2.new(0, 0, 0, 38)
-FovCircleButton.Size = UDim2.new(1, 0, 0, 45)
-FovCircleButton.Font = Enum.Font.RobotoMono
-FovCircleButton.Text = "// FOV CIRCLE: OFF"
-FovCircleButton.TextColor3 = accentColor
-FovCircleButton.TextSize = 14
-addOutline(FovCircleButton, Color3.fromRGB(40, 40, 45), 1)
-addCorner(FovCircleButton, 6)
-
--- FOV SIZE SLIDER
-local FovSliderFrame = Instance.new("Frame")
-FovSliderFrame.Parent = AimFrame
-FovSliderFrame.BackgroundColor3 = bgMid
-FovSliderFrame.Position = UDim2.new(0, 0, 0, 100)
-FovSliderFrame.Size = UDim2.new(1, 0, 0, 75)
-addOutline(FovSliderFrame, Color3.fromRGB(30, 30, 35), 1)
-addCorner(FovSliderFrame, 6)
-
-local FovSliderLabel = Instance.new("TextLabel")
-FovSliderLabel.Parent = FovSliderFrame
-FovSliderLabel.BackgroundTransparency = 1
-FovSliderLabel.Position = UDim2.new(0, 12, 0, 8)
-FovSliderLabel.Size = UDim2.new(0.7, 0, 0, 20)
-FovSliderLabel.Font = Enum.Font.RobotoMono
-FovSliderLabel.Text = "> FOV CIRCLE SIZE:"
-FovSliderLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
-FovSliderLabel.TextSize = 12
-FovSliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local FovValueLabel = Instance.new("TextLabel")
-FovValueLabel.Parent = FovSliderFrame
-FovValueLabel.BackgroundTransparency = 1
-FovValueLabel.Position = UDim2.new(0.75, 0, 0, 8)
-FovValueLabel.Size = UDim2.new(0.22, 0, 0, 20)
-FovValueLabel.Font = Enum.Font.RobotoMono
-FovValueLabel.Text = "120"
-FovValueLabel.TextColor3 = accentColor
-FovValueLabel.TextSize = 12
-FovValueLabel.TextXAlignment = Enum.TextXAlignment.Right
-
-local FovSliderTrack = Instance.new("Frame")
-FovSliderTrack.Parent = FovSliderFrame
-FovSliderTrack.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-FovSliderTrack.Position = UDim2.new(0, 12, 0, 44)
-FovSliderTrack.Size = UDim2.new(1, -24, 0, 6)
-addCorner(FovSliderTrack, 3)
-
-local FovSliderFill = Instance.new("Frame")
-FovSliderFill.Parent = FovSliderTrack
-FovSliderFill.BackgroundColor3 = accentColor
-FovSliderFill.Size = UDim2.new(0.3, 0, 1, 0)
-addCorner(FovSliderFill, 3)
-
-local FovSliderKnob = Instance.new("TextButton")
-FovSliderKnob.Parent = FovSliderTrack
-FovSliderKnob.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-FovSliderKnob.Position = UDim2.new(0.3, -6, 0.5, -6)
-FovSliderKnob.Size = UDim2.new(0, 12, 0, 12)
-FovSliderKnob.Text = ""
-addCorner(FovSliderKnob, 6)
-addOutline(FovSliderKnob, accentColor, 1)
 
 --- ========================================== ---
 -- [[ SETTINGS FRAME ]] --
@@ -829,8 +763,6 @@ local function applyAccentColor(newColor)
 	TpBtn.TextColor3 = newColor
 	SendChatBtn.TextColor3 = newColor
 	EspButton.TextColor3 = newColor
-	FovCircleButton.TextColor3 = newColor
-	FovValueLabel.TextColor3 = newColor
 	UnloadBtn.TextColor3 = newColor
 	TooltipLabel.TextColor3 = newColor
 	PlayerScroll.ScrollBarImageColor3 = newColor
@@ -841,12 +773,7 @@ local function applyAccentColor(newColor)
 	setStrokeColor(SpeedSliderKnob, newColor)
 	JumpSliderFill.BackgroundColor3 = newColor
 	setStrokeColor(JumpSliderKnob, newColor)
-	FovSliderFill.BackgroundColor3 = newColor
-	setStrokeColor(FovSliderKnob, newColor)
 	setStrokeColor(MainFrame, newColor)
-	if fovCircleDrawing and fovCircleDrawing.Visible then
-		fovCircleDrawing.Color = newColor
-	end
 	for _, h in pairs(espHighlights) do
 		if h and h.Parent then h.OutlineColor = newColor end
 	end
@@ -874,9 +801,9 @@ local allTabs = {
 	{btn = HomeTabBtn,    frame = HomeFrame,    name = "HOME"},
 	{btn = PlayerTabBtn,  frame = PlayerScroll, name = "PLAYER"},
 	{btn = MiscTabBtn,    frame = MiscFrame,    name = "MISC"},
-	{btn = SettingsTabBtn,frame = SettingsFrame,name = "SETTINGS"},
 	{btn = EspTabBtn,     frame = EspFrame,     name = "ESP"},
 	{btn = AimTabBtn,     frame = AimFrame,     name = "AIM"},
+	{btn = SettingsTabBtn,frame = SettingsFrame,name = "SETTINGS"},
 }
 
 local function switchTab(activeBtn, activeFrame)
@@ -986,97 +913,6 @@ JumpSliderTrack.InputBegan:Connect(function(input)
 	end
 end)
 
---- ========================================== ---
--- [[ FOV SLIDER ]] --
---- ========================================== ---
-
-local minFov = 30
-local maxFov = 400
-local fovValue = 120
-local draggingFovSlider = false
-fovCircleDrawing = nil
-
-local function updateFovCircle()
-	if fovCircleDrawing and fovCircleDrawing.Visible then
-		local cam = workspace.CurrentCamera
-		local vp = cam.ViewportSize
-		fovCircleDrawing.Position = Vector2.new(vp.X / 2, vp.Y / 2)
-		fovCircleDrawing.Radius = fovValue
-	end
-end
-
-local function updateFovSlider(xRatio)
-	xRatio = math.clamp(xRatio, 0, 1)
-	fovValue = math.floor(minFov + (maxFov - minFov) * xRatio)
-	FovSliderFill.Size = UDim2.new(xRatio, 0, 1, 0)
-	FovSliderKnob.Position = UDim2.new(xRatio, -6, 0.5, -6)
-	FovValueLabel.Text = tostring(fovValue)
-	updateFovCircle()
-end
-
-FovSliderKnob.MouseButton1Down:Connect(function() draggingFovSlider = true end)
-FovSliderTrack.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		draggingFovSlider = true
-		local ratio = (input.Position.X - FovSliderTrack.AbsolutePosition.X) / FovSliderTrack.AbsoluteSize.X
-		updateFovSlider(ratio)
-	end
-end)
-
---- ========================================== ---
--- [[ FOV CIRCLE TOGGLE ]] --
---- ========================================== ---
-
-local fovCircleEnabled = false
-local fovUpdateConnection = nil
-
-local function setFovCircle(enabled)
-	fovCircleEnabled = enabled
-	if enabled then
-		FovCircleButton.Text = "// FOV CIRCLE: ON"
-		FovCircleButton.TextColor3 = Color3.fromRGB(50, 255, 50)
-		setStrokeColor(FovCircleButton, Color3.fromRGB(50, 255, 50))
-		-- maak de cirkel aan via Drawing API
-		fovCircleDrawing = Drawing.new("Circle")
-		fovCircleDrawing.Thickness = 1.5
-		fovCircleDrawing.NumSides = 64
-		fovCircleDrawing.Radius = fovValue
-		fovCircleDrawing.Filled = false
-		fovCircleDrawing.Color = accentColor
-		fovCircleDrawing.Transparency = 1
-		fovCircleDrawing.Visible = true
-		local cam = workspace.CurrentCamera
-		local vp = cam.ViewportSize
-		fovCircleDrawing.Position = Vector2.new(vp.X / 2, vp.Y / 2)
-		fovUpdateConnection = RunService.RenderStepped:Connect(function()
-			if fovCircleDrawing and fovCircleDrawing.Visible then
-				local v = workspace.CurrentCamera.ViewportSize
-				fovCircleDrawing.Position = Vector2.new(v.X / 2, v.Y / 2)
-				fovCircleDrawing.Radius = fovValue
-				fovCircleDrawing.Color = accentColor
-			end
-		end)
-	else
-		FovCircleButton.Text = "// FOV CIRCLE: OFF"
-		FovCircleButton.TextColor3 = accentColor
-		setStrokeColor(FovCircleButton, Color3.fromRGB(40, 40, 45))
-		if fovCircleDrawing then
-			fovCircleDrawing:Remove()
-			fovCircleDrawing = nil
-		end
-		if fovUpdateConnection then
-			fovUpdateConnection:Disconnect()
-			fovUpdateConnection = nil
-		end
-	end
-end
-
-FovCircleButton.MouseButton1Click:Connect(function() setFovCircle(not fovCircleEnabled) end)
-
---- ========================================== ---
--- [[ RENDERSTEP (sliders gezamenlijk) ]] --
---- ========================================== ---
-
 RunService.RenderStepped:Connect(function()
 	if draggingSpeedSlider then
 		local mousePos = UserInputService:GetMouseLocation()
@@ -1088,18 +924,12 @@ RunService.RenderStepped:Connect(function()
 		local ratio = (mousePos.X - JumpSliderTrack.AbsolutePosition.X) / JumpSliderTrack.AbsoluteSize.X
 		updateJumpSlider(ratio)
 	end
-	if draggingFovSlider then
-		local mousePos = UserInputService:GetMouseLocation()
-		local ratio = (mousePos.X - FovSliderTrack.AbsolutePosition.X) / FovSliderTrack.AbsoluteSize.X
-		updateFovSlider(ratio)
-	end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		draggingSpeedSlider = false
 		draggingJumpSlider = false
-		draggingFovSlider = false
 	end
 end)
 
@@ -1380,7 +1210,6 @@ UnloadBtn.MouseButton1Click:Connect(function()
 	setNoclip(false)
 	setInfiniteJump(false)
 	setEsp(false)
-	setFovCircle(false)
 	local char = LocalPlayer.Character
 	if char then
 		local hum = char:FindFirstChild("Humanoid")
