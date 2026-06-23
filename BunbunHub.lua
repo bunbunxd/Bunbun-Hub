@@ -50,6 +50,7 @@ local JumpSliderKnob = Instance.new("TextButton")
 local JumpValueLabel = Instance.new("TextLabel")
 
 local InfiniteJumpButton = Instance.new("TextButton")
+local NoclipButton = Instance.new("TextButton")
 
 local accentColor = Color3.fromRGB(255, 40, 40)
 local bgDark = Color3.fromRGB(10, 10, 12)
@@ -96,6 +97,80 @@ local function styleOptionBtn(btn, parent, text, pos, size)
 	addOutline(btn, Color3.fromRGB(45, 45, 50), 1)
 	addCorner(btn, 6)
 end
+
+-- LOADING SCREEN
+local LoadingGui = Instance.new("ScreenGui")
+LoadingGui.Parent = ScreenGui.Parent
+LoadingGui.ResetOnSpawn = false
+
+local LoadingFrame = Instance.new("Frame")
+LoadingFrame.Parent = LoadingGui
+LoadingFrame.BackgroundColor3 = bgDark
+LoadingFrame.Position = UDim2.new(0.5, -280, 0.25, -205)
+LoadingFrame.Size = UDim2.new(0, 560, 0, 410)
+addOutline(LoadingFrame, accentColor, 1)
+addCorner(LoadingFrame, 8)
+
+local LoadingAscii = Instance.new("TextLabel")
+LoadingAscii.Parent = LoadingFrame
+LoadingAscii.BackgroundTransparency = 1
+LoadingAscii.Position = UDim2.new(0, 0, 0, 30)
+LoadingAscii.Size = UDim2.new(1, 0, 0, 120)
+LoadingAscii.Font = Enum.Font.RobotoMono
+LoadingAscii.Text = " _                 _\n| |__  _   _ _ __ | |__  _   _ _ __\n| '_ \\| | | | '_ \\| '_ \\| | | | '_ \\\n| |_) | |_| | | | | |_) | |_| | | | |\n|_.__/ \\__,_|_| |_|_.__/ \\__,_|_| |_|"
+LoadingAscii.TextColor3 = accentColor
+LoadingAscii.TextSize = 11
+LoadingAscii.TextXAlignment = Enum.TextXAlignment.Center
+LoadingAscii.TextYAlignment = Enum.TextYAlignment.Top
+
+local LoadingAuthor = Instance.new("TextLabel")
+LoadingAuthor.Parent = LoadingFrame
+LoadingAuthor.BackgroundTransparency = 1
+LoadingAuthor.Position = UDim2.new(0, 0, 0, 155)
+LoadingAuthor.Size = UDim2.new(1, 0, 0, 20)
+LoadingAuthor.Font = Enum.Font.RobotoMono
+LoadingAuthor.Text = "made by BununXD"
+LoadingAuthor.TextColor3 = Color3.fromRGB(160, 160, 160)
+LoadingAuthor.TextSize = 11
+LoadingAuthor.TextXAlignment = Enum.TextXAlignment.Center
+
+local LoadingText = Instance.new("TextLabel")
+LoadingText.Parent = LoadingFrame
+LoadingText.BackgroundTransparency = 1
+LoadingText.Position = UDim2.new(0, 20, 0, 220)
+LoadingText.Size = UDim2.new(1, -40, 0, 20)
+LoadingText.Font = Enum.Font.RobotoMono
+LoadingText.Text = "loading bunbun hub"
+LoadingText.TextColor3 = Color3.fromRGB(160, 160, 160)
+LoadingText.TextSize = 12
+LoadingText.TextXAlignment = Enum.TextXAlignment.Center
+
+local LoadingBarBg = Instance.new("Frame")
+LoadingBarBg.Parent = LoadingFrame
+LoadingBarBg.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+LoadingBarBg.Position = UDim2.new(0, 40, 0, 260)
+LoadingBarBg.Size = UDim2.new(1, -80, 0, 8)
+addCorner(LoadingBarBg, 4)
+addOutline(LoadingBarBg, Color3.fromRGB(45, 45, 50), 1)
+
+local LoadingBar = Instance.new("Frame")
+LoadingBar.Parent = LoadingBarBg
+LoadingBar.BackgroundColor3 = accentColor
+LoadingBar.Size = UDim2.new(0, 0, 1, 0)
+addCorner(LoadingBar, 4)
+
+-- Loading animation
+local startTime = tick()
+local loadingDuration = 3
+while tick() - startTime < loadingDuration do
+	local elapsed = tick() - startTime
+	local progress = math.min(elapsed / loadingDuration, 1)
+	LoadingBar.Size = UDim2.new(progress, 0, 1, 0)
+	task.wait(0.016)
+end
+LoadingBar.Size = UDim2.new(1, 0, 1, 0)
+task.wait(0.5)
+LoadingGui:Destroy()
 
 -- MAIN FRAME
 MainFrame.Name = "MainFrame"
@@ -210,8 +285,16 @@ HomeFrame.BackgroundTransparency = 1
 HomeFrame.Size = UDim2.new(1, 0, 1, 0)
 HomeFrame.Visible = true
 
+local HomeScroll = Instance.new("ScrollingFrame")
+HomeScroll.Parent = HomeFrame
+HomeScroll.BackgroundTransparency = 1
+HomeScroll.Size = UDim2.new(1, 0, 1, 0)
+HomeScroll.CanvasSize = UDim2.new(0, 0, 0, 500)
+HomeScroll.ScrollBarThickness = 3
+HomeScroll.ScrollBarImageColor3 = accentColor
+
 local AsciiLabel = Instance.new("TextLabel")
-AsciiLabel.Parent = HomeFrame
+AsciiLabel.Parent = HomeScroll
 AsciiLabel.BackgroundTransparency = 1
 AsciiLabel.Position = UDim2.new(0, 0, 0, 10)
 AsciiLabel.Size = UDim2.new(1, 0, 0, 120)
@@ -219,16 +302,95 @@ AsciiLabel.Font = Enum.Font.RobotoMono
 AsciiLabel.Text = " _                 _\n| |__  _   _ _ __ | |__  _   _ _ __\n| '_ \\| | | | '_ \\| '_ \\| | | | '_ \\\n| |_) | |_| | | | | |_) | |_| | | | |\n|_.__/ \\__,_|_| |_|_.__/ \\__,_|_| |_|"
 AsciiLabel.TextColor3 = accentColor
 AsciiLabel.TextSize = 11
-AsciiLabel.TextXAlignment = Enum.TextXAlignment.Left
+AsciiLabel.TextXAlignment = Enum.TextXAlignment.Center
 AsciiLabel.TextYAlignment = Enum.TextYAlignment.Top
-AsciiLabel.RichText = false
+
+local AuthorLabel = Instance.new("TextLabel")
+AuthorLabel.Parent = HomeScroll
+AuthorLabel.BackgroundTransparency = 1
+AuthorLabel.Position = UDim2.new(0, 0, 0, 135)
+AuthorLabel.Size = UDim2.new(1, 0, 0, 20)
+AuthorLabel.Font = Enum.Font.RobotoMono
+AuthorLabel.Text = "made by BununXD"
+AuthorLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+AuthorLabel.TextSize = 11
+AuthorLabel.TextXAlignment = Enum.TextXAlignment.Center
+
+local DividerLine = Instance.new("Frame")
+DividerLine.Parent = HomeScroll
+DividerLine.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+DividerLine.Position = UDim2.new(0, 15, 0, 165)
+DividerLine.Size = UDim2.new(1, -30, 0, 1)
+
+local PlayerInfoLabel = Instance.new("TextLabel")
+PlayerInfoLabel.Parent = HomeScroll
+PlayerInfoLabel.BackgroundTransparency = 1
+PlayerInfoLabel.Position = UDim2.new(0, 0, 0, 180)
+PlayerInfoLabel.Size = UDim2.new(1, 0, 0, 20)
+PlayerInfoLabel.Font = Enum.Font.RobotoMono
+PlayerInfoLabel.Text = "// PLAYER INFO"
+PlayerInfoLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
+PlayerInfoLabel.TextSize = 12
+PlayerInfoLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local AvatarFrame = Instance.new("Frame")
+AvatarFrame.Parent = HomeScroll
+AvatarFrame.BackgroundColor3 = bgMid
+AvatarFrame.Position = UDim2.new(0, 10, 0, 210)
+AvatarFrame.Size = UDim2.new(1, -20, 0, 120)
+addOutline(AvatarFrame, Color3.fromRGB(30, 30, 35), 1)
+addCorner(AvatarFrame, 6)
+
+local AvatarImage = Instance.new("ImageLabel")
+AvatarImage.Parent = AvatarFrame
+AvatarImage.BackgroundTransparency = 1
+AvatarImage.Position = UDim2.new(0, 10, 0, 10)
+AvatarImage.Size = UDim2.new(0, 100, 0, 100)
+AvatarImage.Image = "https://www.roblox.com/bust-thumbnails/image?userId=" .. LocalPlayer.UserId .. "&width=420&height=420&format=png"
+addCorner(AvatarImage, 6)
+
+local DisplayNameLabel = Instance.new("TextLabel")
+DisplayNameLabel.Parent = AvatarFrame
+DisplayNameLabel.BackgroundTransparency = 1
+DisplayNameLabel.Position = UDim2.new(0, 120, 0, 10)
+DisplayNameLabel.Size = UDim2.new(1, -130, 0, 30)
+DisplayNameLabel.Font = Enum.Font.RobotoMono
+DisplayNameLabel.Text = "Display: " .. LocalPlayer.DisplayName
+DisplayNameLabel.TextColor3 = accentColor
+DisplayNameLabel.TextSize = 11
+DisplayNameLabel.TextXAlignment = Enum.TextXAlignment.Left
+DisplayNameLabel.TextWrapped = true
+
+local UsernameLabel = Instance.new("TextLabel")
+UsernameLabel.Parent = AvatarFrame
+UsernameLabel.BackgroundTransparency = 1
+UsernameLabel.Position = UDim2.new(0, 120, 0, 45)
+UsernameLabel.Size = UDim2.new(1, -130, 0, 30)
+UsernameLabel.Font = Enum.Font.RobotoMono
+UsernameLabel.Text = "Username: @" .. LocalPlayer.Name
+UsernameLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+UsernameLabel.TextSize = 11
+UsernameLabel.TextXAlignment = Enum.TextXAlignment.Left
+UsernameLabel.TextWrapped = true
+
+local UserIdLabel = Instance.new("TextLabel")
+UserIdLabel.Parent = AvatarFrame
+UserIdLabel.BackgroundTransparency = 1
+UserIdLabel.Position = UDim2.new(0, 120, 0, 80)
+UserIdLabel.Size = UDim2.new(1, -130, 0, 30)
+UserIdLabel.Font = Enum.Font.RobotoMono
+UserIdLabel.Text = "ID: " .. LocalPlayer.UserId
+UserIdLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+UserIdLabel.TextSize = 11
+UserIdLabel.TextXAlignment = Enum.TextXAlignment.Left
+UserIdLabel.TextWrapped = true
 
 -- ===================== PLAYER SCROLL =====================
 PlayerScroll.Name = "PlayerScroll"
 PlayerScroll.Parent = ContentContainer
 PlayerScroll.BackgroundTransparency = 1
 PlayerScroll.Size = UDim2.new(1, 0, 1, 0)
-PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, 530)
+PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, 620)
 PlayerScroll.ScrollBarThickness = 3
 PlayerScroll.ScrollBarImageColor3 = accentColor
 PlayerScroll.Visible = false
@@ -433,6 +595,18 @@ InfiniteJumpButton.TextSize = 14
 addOutline(InfiniteJumpButton, Color3.fromRGB(40, 40, 45), 1)
 addCorner(InfiniteJumpButton, 6)
 
+-- NOCLIP BUTTON
+NoclipButton.Parent = PlayerScroll
+NoclipButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+NoclipButton.Position = UDim2.new(0, 0, 0, 510)
+NoclipButton.Size = UDim2.new(1, 0, 0, 45)
+NoclipButton.Font = Enum.Font.RobotoMono
+NoclipButton.Text = "// TOGGLE NOCLIP: OFF"
+NoclipButton.TextColor3 = accentColor
+NoclipButton.TextSize = 14
+addOutline(NoclipButton, Color3.fromRGB(40, 40, 45), 1)
+addCorner(NoclipButton, 6)
+
 --- ========================================== ---
 -- [[ MISC FRAME ]] --
 --- ========================================== ---
@@ -614,8 +788,16 @@ addCorner(EspButton, 6)
 -- [[ AIM FRAME ]] --
 --- ========================================== ---
 
+local AimScroll = Instance.new("ScrollingFrame")
+AimScroll.Parent = AimFrame
+AimScroll.BackgroundTransparency = 1
+AimScroll.Size = UDim2.new(1, 0, 1, 0)
+AimScroll.CanvasSize = UDim2.new(0, 0, 0, 200)
+AimScroll.ScrollBarThickness = 3
+AimScroll.ScrollBarImageColor3 = accentColor
+
 local AimLabel = Instance.new("TextLabel")
-AimLabel.Parent = AimFrame
+AimLabel.Parent = AimScroll
 AimLabel.BackgroundTransparency = 1
 AimLabel.Position = UDim2.new(0, 0, 0, 10)
 AimLabel.Size = UDim2.new(1, 0, 0, 20)
@@ -624,6 +806,18 @@ AimLabel.Text = "// AIM"
 AimLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
 AimLabel.TextSize = 13
 AimLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local CrosshairButton = Instance.new("TextButton")
+CrosshairButton.Parent = AimScroll
+CrosshairButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+CrosshairButton.Position = UDim2.new(0, 0, 0, 38)
+CrosshairButton.Size = UDim2.new(1, 0, 0, 45)
+CrosshairButton.Font = Enum.Font.RobotoMono
+CrosshairButton.Text = "// CROSSHAIR: OFF"
+CrosshairButton.TextColor3 = accentColor
+CrosshairButton.TextSize = 14
+addOutline(CrosshairButton, Color3.fromRGB(40, 40, 45), 1)
+addCorner(CrosshairButton, 6)
 
 --- ========================================== ---
 -- [[ SETTINGS FRAME ]] --
@@ -634,7 +828,7 @@ SettingsScroll.Name = "SettingsScroll"
 SettingsScroll.Parent = SettingsFrame
 SettingsScroll.BackgroundTransparency = 1
 SettingsScroll.Size = UDim2.new(1, 0, 1, 0)
-SettingsScroll.CanvasSize = UDim2.new(0, 0, 0, 420)
+SettingsScroll.CanvasSize = UDim2.new(0, 0, 0, 360)
 SettingsScroll.ScrollBarThickness = 3
 SettingsScroll.ScrollBarImageColor3 = accentColor
 
@@ -649,22 +843,10 @@ SettingsLabel.TextColor3 = Color3.fromRGB(120, 120, 120)
 SettingsLabel.TextSize = 13
 SettingsLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-local NoclipButton = Instance.new("TextButton")
-NoclipButton.Parent = SettingsScroll
-NoclipButton.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-NoclipButton.Position = UDim2.new(0, 0, 0, 38)
-NoclipButton.Size = UDim2.new(1, 0, 0, 45)
-NoclipButton.Font = Enum.Font.RobotoMono
-NoclipButton.Text = "// TOGGLE NOCLIP: OFF"
-NoclipButton.TextColor3 = accentColor
-NoclipButton.TextSize = 14
-addOutline(NoclipButton, Color3.fromRGB(40, 40, 45), 1)
-addCorner(NoclipButton, 6)
-
 local SettingsKeybindLabel = Instance.new("TextLabel")
 SettingsKeybindLabel.Parent = SettingsScroll
 SettingsKeybindLabel.BackgroundTransparency = 1
-SettingsKeybindLabel.Position = UDim2.new(0, 0, 0, 98)
+SettingsKeybindLabel.Position = UDim2.new(0, 0, 0, 48)
 SettingsKeybindLabel.Size = UDim2.new(1, 0, 0, 16)
 SettingsKeybindLabel.Font = Enum.Font.RobotoMono
 SettingsKeybindLabel.Text = "> TOGGLE HOTKEY:"
@@ -675,7 +857,7 @@ SettingsKeybindLabel.TextXAlignment = Enum.TextXAlignment.Left
 local SettingsKeybindBtn = Instance.new("TextButton")
 SettingsKeybindBtn.Parent = SettingsScroll
 SettingsKeybindBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-SettingsKeybindBtn.Position = UDim2.new(0, 0, 0, 118)
+SettingsKeybindBtn.Position = UDim2.new(0, 0, 0, 68)
 SettingsKeybindBtn.Size = UDim2.new(1, 0, 0, 34)
 SettingsKeybindBtn.Font = Enum.Font.RobotoMono
 SettingsKeybindBtn.Text = "BIND: LAlt"
@@ -687,7 +869,7 @@ addCorner(SettingsKeybindBtn, 6)
 local ColorLabel = Instance.new("TextLabel")
 ColorLabel.Parent = SettingsScroll
 ColorLabel.BackgroundTransparency = 1
-ColorLabel.Position = UDim2.new(0, 0, 0, 164)
+ColorLabel.Position = UDim2.new(0, 0, 0, 114)
 ColorLabel.Size = UDim2.new(1, 0, 0, 16)
 ColorLabel.Font = Enum.Font.RobotoMono
 ColorLabel.Text = "> UI ACCENT COLOR:"
@@ -711,7 +893,7 @@ for i, opt in ipairs(colorOptions) do
 	local cb = Instance.new("TextButton")
 	cb.Parent = SettingsScroll
 	cb.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
-	cb.Position = UDim2.new(0, col * 120, 0, 184 + row * 42)
+	cb.Position = UDim2.new(0, col * 120, 0, 134 + row * 42)
 	cb.Size = UDim2.new(0, 112, 0, 34)
 	cb.Font = Enum.Font.RobotoMono
 	cb.Text = opt.name
@@ -725,7 +907,7 @@ end
 local UnloadBtn = Instance.new("TextButton")
 UnloadBtn.Parent = SettingsScroll
 UnloadBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-UnloadBtn.Position = UDim2.new(0, 0, 0, 275)
+UnloadBtn.Position = UDim2.new(0, 0, 0, 225)
 UnloadBtn.Size = UDim2.new(1, 0, 0, 45)
 UnloadBtn.Font = Enum.Font.RobotoMono
 UnloadBtn.Text = "// UNLOAD SCRIPT"
@@ -754,6 +936,7 @@ local function applyAccentColor(newColor)
 	end
 	Title.TextColor3 = newColor
 	AsciiLabel.TextColor3 = newColor
+	AuthorLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
 	FlyButton.TextColor3 = newColor
 	NoclipButton.TextColor3 = newColor
 	InfiniteJumpButton.TextColor3 = newColor
@@ -763,11 +946,14 @@ local function applyAccentColor(newColor)
 	TpBtn.TextColor3 = newColor
 	SendChatBtn.TextColor3 = newColor
 	EspButton.TextColor3 = newColor
+	CrosshairButton.TextColor3 = newColor
 	UnloadBtn.TextColor3 = newColor
 	TooltipLabel.TextColor3 = newColor
 	PlayerScroll.ScrollBarImageColor3 = newColor
 	MiscScroll.ScrollBarImageColor3 = newColor
 	SettingsScroll.ScrollBarImageColor3 = newColor
+	AimScroll.ScrollBarImageColor3 = newColor
+	HomeScroll.ScrollBarImageColor3 = newColor
 	TpListFrame.ScrollBarImageColor3 = newColor
 	SpeedSliderFill.BackgroundColor3 = newColor
 	setStrokeColor(SpeedSliderKnob, newColor)
@@ -999,6 +1185,69 @@ end
 InfiniteJumpButton.MouseButton1Click:Connect(function() setInfiniteJump(not infiniteJumpEnabled) end)
 
 --- ========================================== ---
+-- [[ CROSSHAIR ]] --
+--- ========================================== ---
+
+local crosshairEnabled = false
+local crosshairGui = nil
+
+local function createCrosshair()
+	local gui = Instance.new("ScreenGui")
+	gui.Parent = ScreenGui.Parent
+	gui.ResetOnSpawn = false
+	gui.Name = "CrosshairGui"
+	
+	local centerH = Instance.new("Frame")
+	centerH.Parent = gui
+	centerH.BackgroundColor3 = accentColor
+	centerH.BorderSizePixel = 0
+	centerH.Size = UDim2.new(0, 20, 0, 2)
+	centerH.AnchorPoint = Vector2.new(0.5, 0.5)
+	centerH.Position = UDim2.new(0.5, 0, 0.5, 0)
+	
+	local centerV = Instance.new("Frame")
+	centerV.Parent = gui
+	centerV.BackgroundColor3 = accentColor
+	centerV.BorderSizePixel = 0
+	centerV.Size = UDim2.new(0, 2, 0, 20)
+	centerV.AnchorPoint = Vector2.new(0.5, 0.5)
+	centerV.Position = UDim2.new(0.5, 0, 0.5, 0)
+	
+	local dot = Instance.new("Frame")
+	dot.Parent = gui
+	dot.BackgroundColor3 = accentColor
+	dot.BorderSizePixel = 0
+	dot.Size = UDim2.new(0, 4, 0, 4)
+	dot.AnchorPoint = Vector2.new(0.5, 0.5)
+	dot.Position = UDim2.new(0.5, 0, 0.5, 0)
+	addCorner(dot, 2)
+	
+	return gui
+end
+
+local function setCrosshair(enabled)
+	crosshairEnabled = enabled
+	if enabled then
+		CrosshairButton.Text = "// CROSSHAIR: ON"
+		CrosshairButton.TextColor3 = Color3.fromRGB(50, 255, 50)
+		setStrokeColor(CrosshairButton, Color3.fromRGB(50, 255, 50))
+		if not crosshairGui then
+			crosshairGui = createCrosshair()
+		end
+	else
+		CrosshairButton.Text = "// CROSSHAIR: OFF"
+		CrosshairButton.TextColor3 = accentColor
+		setStrokeColor(CrosshairButton, Color3.fromRGB(40, 40, 45))
+		if crosshairGui then
+			crosshairGui:Destroy()
+			crosshairGui = nil
+		end
+	end
+end
+
+CrosshairButton.MouseButton1Click:Connect(function() setCrosshair(not crosshairEnabled) end)
+
+--- ========================================== ---
 -- [[ ESP ]] --
 --- ========================================== ---
 
@@ -1210,6 +1459,7 @@ UnloadBtn.MouseButton1Click:Connect(function()
 	setNoclip(false)
 	setInfiniteJump(false)
 	setEsp(false)
+	setCrosshair(false)
 	local char = LocalPlayer.Character
 	if char then
 		local hum = char:FindFirstChild("Humanoid")
